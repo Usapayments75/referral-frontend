@@ -1,8 +1,8 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestCoapi/v1nfig } from 'axios';
 import { useAuthStore } from '../store/authStore';
 
 const api = axios.create({
-    baseURL: 'http://3.19.203.51:5000/api/v1',
+    baseURL: 'https://api-partnerportal.usapayments.com/api/v1',
     // baseURL: 'http://localhost:5000/api/v1',
     headers: {
         'Content-Type': 'application/json',
