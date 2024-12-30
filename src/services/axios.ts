@@ -1,4 +1,4 @@
-import axios, { AxiosError, InternalAxiosRequestCoapi/v1nfig } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '../store/authStore';
 
 const api = axios.create({
