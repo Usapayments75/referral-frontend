@@ -1,17 +1,17 @@
 import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { LogOut, Users, Video, LayoutDashboard, Send, DollarSign } from 'lucide-react';
+import { Copy } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
+import Logo from './Logo';
 
 export default function Layout() {
 	const { user, logout } = useAuthStore();
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	// Use the profile hook to handle profile refresh
 	useProfile();
 
 	const isActive = (path: string) => location.pathname === path;
@@ -30,15 +30,10 @@ export default function Layout() {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<nav className="bg-[#0f172a] text-white p-4">
+			<nav className="bg-white shadow-sm text-gray-800 p-4">
 				<div className="container mx-auto flex justify-between items-center">
 					<Link to="/" className="flex items-center space-x-2">
-						<div className="text-red-500">
-							<LayoutDashboard size={24} />
-						</div>
-						<span className="text-xl font-bold">
-							{user?.role === 'admin' ? 'Admin Portal' : 'Referral Portal'}
-						</span>
+						<Logo />
 					</Link>
 
 					<div className="flex items-center space-x-6">
@@ -46,87 +41,75 @@ export default function Layout() {
 							<>
 								<Link
 									to="/admin"
-									className={`flex items-center space-x-1 hover:text-gray-300 ${isActive('/admin') ? 'text-red-400' : ''
-										}`}
+									className={`hover:text-gray-600 ${isActive('/admin') ? 'text-red-600' : ''}`}
 								>
-									<LayoutDashboard size={20} />
-									<span>Dashboard</span>
+									Dashboard
 								</Link>
 								<Link
 									to="/admin/users"
-									className={`flex items-center space-x-1 hover:text-gray-300 ${isActive('/admin/users') ? 'text-red-400' : ''
-										}`}
+									className={`hover:text-gray-600 ${isActive('/admin/users') ? 'text-red-600' : ''}`}
 								>
-									<Users size={20} />
-									<span>Users</span>
+									Users
 								</Link>
 								<Link
 									to="/admin/tutorials"
-									className={`flex items-center space-x-1 hover:text-gray-300 ${isActive('/admin/tutorials') ? 'text-red-400' : ''
-										}`}
+									className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
 								>
-									<Video size={20} />
-									<span>Tutorials</span>
+									Tutorials
 								</Link>
 							</>
 						) : (
 							<>
 								<Link
 									to="/dashboard"
-									className={`flex items-center space-x-1 hover:text-gray-300 ${isActive('/dashboard') ? 'text-red-400' : ''
-										}`}
+									className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
 								>
-									<LayoutDashboard size={20} />
-									<span>Dashboard</span>
-								</Link>
-								<Link
-									to="/submit"
-									className={`flex items-center space-x-1 hover:text-gray-300 ${isActive('/submit') ? 'text-red-400' : ''
-										}`}
-								>
-									<Send size={20} />
-									<span>Submit Referral</span>
-								</Link>
-								{user && (
-									<CopyLinkButton link={getReferralLink(user)} />
-								)}
+									Dashboard
+								</Link> 
 								<Link
 									to="/tutorials"
-									className={`flex items-center space-x-1 hover:text-gray-300 ${isActive('/tutorials') ? 'text-red-400' : ''
-										}`}
+									className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
 								>
-									<Video size={20} />
-									<span>Tutorials</span>
+									Tutorials
 								</Link>
 								{user?.compensation_link ? (
 									<a
 										href={user.compensation_link}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="flex items-center space-x-1 hover:text-gray-300"
+										className="hover:text-gray-600"
 									>
-										<DollarSign size={20} />
-										<span>My Commissions</span>
+										My Commissions
 									</a>
 								) : (
 									<button
 										onClick={() => alert('No compensation link available. Please contact an administrator.')}
-										className="flex items-center space-x-1 hover:text-gray-300 opacity-50 cursor-not-allowed"
+										className="hover:text-gray-600 opacity-50 cursor-not-allowed"
 									>
-										<DollarSign size={20} />
-										<span>My Commissions</span>
+										My Commissions
 									</button>
 								)}
+								{user && (
+									<CopyLinkButton link={getReferralLink(user)} />
+								)}
+								<Link
+									target="_blank"
+									to="https://usapayments.com/contact-us/"
+									className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
+								>
+									Contact Us
+								</Link>
 							</>
 						)}
-						<div className="flex items-center space-x-4 ml-4 pl-4 border-l border-gray-700">
-							<span className="text-sm">{user?.full_name}</span> 
-							<button
-								onClick={handleLogout}
-								className="text-gray-300 hover:text-white"
+						<div className="flex items-center space-x-4 ml-4 pl-4">
+						{/* border-gray-200 */}
+							{/* <span className="text-sm">{user?.full_name}</span> */}
+							<Link
+								to="/submit"
+								className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
 							>
-								<LogOut size={20} />
-							</button>
+								Submit Referral
+							</Link>
 						</div>
 					</div>
 				</div>
