@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { Copy } from 'lucide-react';
+import { Copy, Menu, X } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
@@ -11,6 +11,7 @@ export default function Layout() {
 	const { user, logout } = useAuthStore();
 	const location = useLocation();
 	const navigate = useNavigate();
+	const [isOpen, setIsOpen] = useState(false);
 
 	useProfile();
 
@@ -31,85 +32,183 @@ export default function Layout() {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			<nav className="bg-white shadow-sm text-gray-800 p-4">
-				<div className="container mx-auto flex justify-between items-center">
-					<Link to="/" className="flex items-center space-x-2">
-						<Logo />
-					</Link>
+				<div className="container mx-auto">
+					<div className="flex justify-between items-center">
+						<Link to="/" className="flex items-center space-x-2">
+							<Logo />
+						</Link>
 
-					<div className="flex items-center space-x-6">
-						{user?.role === 'admin' ? (
-							<>
-								<Link
-									to="/admin"
-									className={`hover:text-gray-600 ${isActive('/admin') ? 'text-red-600' : ''}`}
-								>
-									Dashboard
-								</Link>
-								<Link
-									to="/admin/users"
-									className={`hover:text-gray-600 ${isActive('/admin/users') ? 'text-red-600' : ''}`}
-								>
-									Users
-								</Link>
-								<Link
-									to="/admin/tutorials"
-									className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
-								>
-									Tutorials
-								</Link>
-							</>
-						) : (
-							<>
-								<Link
-									to="/dashboard"
-									className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
-								>
-									Dashboard
-								</Link> 
-								<Link
-									to="/tutorials"
-									className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
-								>
-									Tutorials
-								</Link>
-								{user?.compensation_link ? (
-									<a
-										href={user.compensation_link}
+						{/* Mobile menu button */}
+						<button
+							onClick={() => setIsOpen(!isOpen)}
+							className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+						>
+							{isOpen ? <X size={24} /> : <Menu size={24} />}
+						</button>
+
+						{/* Desktop Navigation */}
+						<div className="hidden lg:flex items-center space-x-6">
+							{user?.role === 'admin' ? (
+								<>
+									<Link
+										to="/admin"
+										className={`hover:text-gray-600 ${isActive('/admin') ? 'text-red-600' : ''}`}
+									>
+										Dashboard
+									</Link>
+									<Link
+										to="/admin/users"
+										className={`hover:text-gray-600 ${isActive('/admin/users') ? 'text-red-600' : ''}`}
+									>
+										Users
+									</Link>
+									<Link
+										to="/admin/tutorials"
+										className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
+									>
+										Tutorials
+									</Link>
+								</>
+							) : (
+								<>
+									<Link
+										to="/dashboard"
+										className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
+									>
+										Dashboard
+									</Link> 
+									<Link
+										to="/tutorials"
+										className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
+									>
+										Tutorials
+									</Link>
+									{user?.compensation_link ? (
+										<a
+											href={user.compensation_link}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="hover:text-gray-600"
+										>
+											My Commissions
+										</a>
+									) : (
+										<button
+											onClick={() => alert('No compensation link available. Please contact an administrator.')}
+											className="hover:text-gray-600 opacity-50 cursor-not-allowed"
+										>
+											My Commissions
+										</button>
+									)}
+									{user && (
+										<CopyLinkButton link={getReferralLink(user)} />
+									)}
+									<Link
 										target="_blank"
-										rel="noopener noreferrer"
-										className="hover:text-gray-600"
+										to="https://usapayments.com/contact-us/"
+										className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
 									>
-										My Commissions
-									</a>
-								) : (
-									<button
-										onClick={() => alert('No compensation link available. Please contact an administrator.')}
-										className="hover:text-gray-600 opacity-50 cursor-not-allowed"
-									>
-										My Commissions
-									</button>
-								)}
-								{user && (
-									<CopyLinkButton link={getReferralLink(user)} />
-								)}
+										Contact Us
+									</Link>
+								</>
+							)}
+							<div className="flex items-center space-x-4 ml-4 pl-4">
 								<Link
-									target="_blank"
-									to="https://usapayments.com/contact-us/"
-									className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
+									to="/submit"
+									className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
 								>
-									Contact Us
+									Submit Referral
 								</Link>
-							</>
-						)}
-						<div className="flex items-center space-x-4 ml-4 pl-4">
-						{/* border-gray-200 */}
-							{/* <span className="text-sm">{user?.full_name}</span> */}
-							<Link
-								to="/submit"
-								className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-							>
-								Submit Referral
-							</Link>
+							</div>
+						</div>
+					</div>
+
+					{/* Mobile Navigation */}
+					<div className={`lg:hidden ${isOpen ? 'block' : 'hidden'} pt-4`}>
+						<div className="flex flex-col space-y-4">
+							{user?.role === 'admin' ? (
+								<>
+									<Link
+										to="/admin"
+										className={`hover:text-gray-600 ${isActive('/admin') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Dashboard
+									</Link>
+									<Link
+										to="/admin/users"
+										className={`hover:text-gray-600 ${isActive('/admin/users') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Users
+									</Link>
+									<Link
+										to="/admin/tutorials"
+										className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Tutorials
+									</Link>
+								</>
+							) : (
+								<>
+									<Link
+										to="/dashboard"
+										className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Dashboard
+									</Link>
+									<Link
+										to="/tutorials"
+										className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Tutorials
+									</Link>
+									{user?.compensation_link ? (
+										<a
+											href={user.compensation_link}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="hover:text-gray-600"
+											onClick={() => setIsOpen(false)}
+										>
+											My Commissions
+										</a>
+									) : (
+										<button
+											onClick={() => {
+												alert('No compensation link available. Please contact an administrator.');
+												setIsOpen(false);
+											}}
+											className="hover:text-gray-600 opacity-50 cursor-not-allowed text-left"
+										>
+											My Commissions
+										</button>
+									)}
+									{user && (
+										<div onClick={() => setIsOpen(false)}>
+											<CopyLinkButton link={getReferralLink(user)} />
+										</div>
+									)}
+									<Link
+										target="_blank"
+										to="https://usapayments.com/contact-us/"
+										className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Contact Us
+									</Link>
+									<Link
+										to="/submit"
+										className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-center"
+										onClick={() => setIsOpen(false)}
+									>
+										Submit Referral
+									</Link>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
