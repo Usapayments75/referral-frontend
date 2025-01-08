@@ -229,7 +229,7 @@ export default function PublicReferral() {
 							Cookies
 						</a>
 					</div>
-					<div className="text-sm bold text-gray-600">
+					<div className="font-extrabold text-gray-600">
 						Copyright © 2024 USA Payments, All rights reserved.
 					</div>
 				</div>
