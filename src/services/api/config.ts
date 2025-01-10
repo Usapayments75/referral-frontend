@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { RetryConfig, shouldRetry, getRetryDelay } from './retryConfig';
 
-// export const API_BASE_URL = 'https://api-partnerportal.usapayments.com/api/v1';
-export const API_BASE_URL = 'http://localhost:5000/api/v1';
+export const API_BASE_URL = 'https://api-partnerportal.usapayments.com/api/v1';
+// export const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

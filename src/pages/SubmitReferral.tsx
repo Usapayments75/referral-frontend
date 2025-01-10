@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useAuthStore } from '../store/authStore';
 import PhoneInput from '../components/PhoneInput';
+import BusinessTypeSelect from '../components/form/BusinessTypeSelect';
 import { formatPhoneNumber } from '../utils/countryData';
-import { submitPublicReferral } from '../services/api/referral';
+import { zohoService } from '../services/zoho';
 import SuccessMessage from '../components/referrals/SuccessMessage';
 
 interface ReferralForm {
@@ -18,8 +19,8 @@ interface ReferralForm {
 	description: string;
 }
 
-export default function PublicReferral() {
-	const { uuid } = useParams<{ uuid: string }>();
+export default function SubmitReferral() {
+	const { user } = useAuthStore();
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -31,7 +32,7 @@ export default function PublicReferral() {
 	});
 
 	const onSubmit = async (data: ReferralForm) => {
-		if (!uuid) return;
+		if (!user) return;
 
 		setSubmitting(true);
 		setSubmitError(null);
@@ -39,14 +40,14 @@ export default function PublicReferral() {
 
 		try {
 			const formattedPhone = formatPhoneNumber(data.countryCode, data.phoneNumber);
-			await submitPublicReferral({
-				uuid,
+			await zohoService.submitReferral({
 				firstName: data.firstName,
 				lastName: data.lastName,
 				email: data.email,
 				company: data.company,
 				businessType: data.businessType,
 				phoneNumber: formattedPhone,
+				title: formattedPhone, // Using phone number as title for now
 				description: data.description
 			});
 			setSubmitSuccess(true);
@@ -66,14 +67,13 @@ export default function PublicReferral() {
 		<div className="min-h-screen flex flex-col bg-gray-50">
 			<div className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
 				<div className="max-w-2xl mx-auto">
-					<div className="text-center mb-24">
+					<div className="text-center mb-14">
 						<img
 							src="https://usapayments.com/wp-content/uploads/2023/03/28facc_76a02a73c8fc4d41b0a72805a254af78_mv2_d_2500_1500_s_2-1.png"
 							alt="USA Payments"
 							className="h-24 mx-auto"
 						/>
 					</div>
-					{/* Rest of the form content */}
 					<div className="bg-white shadow rounded-lg p-8">
 						<div className="flex items-center space-x-3 mb-6">
 							<Send className="h-6 w-6 text-red-600" />
@@ -158,6 +158,12 @@ export default function PublicReferral() {
 									<p className="mt-1 text-sm text-red-600">{errors.company.message}</p>
 								)}
 							</div>
+
+							<BusinessTypeSelect
+								register={register}
+								disabled={submitting}
+								error={errors.businessType?.message}
+							/>
 
 							<PhoneInput
 								register={register}
