@@ -24,6 +24,8 @@ export default function PublicReferral() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
 
   const { register, handleSubmit, formState: { errors } } = useForm<ReferralForm>({
     defaultValues: {
@@ -31,6 +33,24 @@ export default function PublicReferral() {
       smsConsent: false
     }
   });
+
+
+
+const faqs = [
+	{
+	  question: "How Can Merchants Save Up To 100% On Processing Fees?",
+	  answer: "Our dual pricing program allows you to offset processing fees by passing the cost to your customers as a service charge, letting you save up to 100%"
+	},
+	{
+	  question: "What Types of Businesses Do You Work With?",
+	  answer: "We work with businesses of all sizes across various industries, including retail, restaurants, e-commerce, and service-based businesses."
+	},
+	{
+	  question: "How Long Does the Analysis Process Take?",
+	  answer: "Our analysis process typically takes 24-48 hours. We'll review your current processing statements and provide a detailed savings report."
+	}
+  ];
+  
 
   const onSubmit = async (data: ReferralForm) => {
     setSubmitting(true);
@@ -230,6 +250,33 @@ ${data.description || 'None provided'}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      </section>
+
+	  {/* FAQ Section */}
+      <section id="faq" className="bg-gray-50 py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
+            Your Questions, Answered
+          </h2>
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <button
+                  onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                  className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50"
+                >
+                  <h3 className="text-lg font-medium text-gray-900">{faq.question}</h3>
+                  <span className={`transform transition-transform ${openFAQ === index ? 'rotate-180' : ''}`}>
+                    ▼
+                  </span>
+                </button>
+                <div className={`px-6 py-4 bg-gray-50 transition-all duration-200 ${openFAQ === index ? 'block' : 'hidden'}`}>
+                  <p className="text-gray-600">{faq.answer}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
