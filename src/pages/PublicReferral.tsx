@@ -19,6 +19,7 @@ interface ReferralForm {
 }
 
 export default function PublicReferral() {
+	const { uuid } = useParams<{ uuid: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -38,7 +39,7 @@ export default function PublicReferral() {
     try {
       const formattedPhone = formatPhoneNumber(data.countryCode, data.phoneNumber);
       await submitPublicReferral({
-        uuid: 'public',
+        uuid,
         firstName: data.fullName.split(' ')[0],
         lastName: data.fullName.split(' ').slice(1).join(' '),
         email: data.email,
