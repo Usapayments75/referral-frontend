@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { Copy, Menu, X } from 'lucide-react';
+import { Copy, Menu, X, LogOut, Settings as SettingsIcon } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
@@ -68,6 +68,12 @@ export default function Layout() {
 									>
 										Tutorials
 									</Link>
+									<Link
+										to="/admin/settings"
+										className={`hover:text-gray-600 ${isActive('/admin/settings') ? 'text-red-600' : ''}`}
+									>
+										Settings
+									</Link>
 								</>
 							) : (
 								<>
@@ -112,13 +118,22 @@ export default function Layout() {
 									</Link>
 								</>
 							)}
-							<div className="flex items-center space-x-4 ml-4 pl-4">
+							<div className="flex items-center space-x-4 ml-4 pl-4 border-l border-gray-200">
 								<Link
 									to="/submit"
 									className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
 								>
 									Submit Referral
 								</Link>
+								{user && (
+									<button
+										onClick={handleLogout}
+										className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
+									>
+										<LogOut className="h-5 w-5" />
+										<span>Log Out</span>
+									</button>
+								)}
 							</div>
 						</div>
 					</div>
@@ -148,6 +163,13 @@ export default function Layout() {
 										onClick={() => setIsOpen(false)}
 									>
 										Tutorials
+									</Link>
+									<Link
+										to="/admin/settings"
+										className={`hover:text-gray-600 ${isActive('/admin/settings') ? 'text-red-600' : ''}`}
+										onClick={() => setIsOpen(false)}
+									>
+										Settings
 									</Link>
 								</>
 							) : (
@@ -207,6 +229,18 @@ export default function Layout() {
 									>
 										Submit Referral
 									</Link>
+									{user && (
+										<button
+											onClick={() => {
+												handleLogout();
+												setIsOpen(false);
+											}}
+											className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
+										>
+											<LogOut className="h-5 w-5" />
+											<span>Log Out</span>
+										</button>
+									)}
 								</>
 							)}
 						</div>

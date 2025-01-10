@@ -12,6 +12,7 @@ import {
 	AdminDashboard,
 	UserManagement,
 	TutorialManagement,
+	Settings,
 	SubmitReferral,
 	Tutorials,
 	Compensation
@@ -73,6 +74,7 @@ function AppRoutes() {
 						<Route path="/admin" element={<AdminDashboard />} />
 						<Route path="/admin/users" element={<UserManagement />} />
 						<Route path="/admin/tutorials" element={<TutorialManagement />} />
+						<Route path="/admin/settings" element={<Settings />} />
 					</Route>
 
 					{/* User Routes */}

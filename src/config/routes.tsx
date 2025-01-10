@@ -7,6 +7,7 @@ export const Dashboard = React.lazy(() => import('../pages/Dashboard'));
 export const AdminDashboard = React.lazy(() => import('../pages/admin/AdminDashboard'));
 export const UserManagement = React.lazy(() => import('../pages/admin/UserManagement'));
 export const TutorialManagement = React.lazy(() => import('../pages/admin/TutorialManagement'));
+export const Settings = React.lazy(() => import('../pages/admin/Settings'));
 export const SubmitReferral = React.lazy(() => import('../pages/SubmitReferral'));
 export const Tutorials = React.lazy(() => import('../pages/Tutorials'));
 export const Compensation = React.lazy(() => import('../pages/Compensation'));
