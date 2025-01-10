@@ -6,12 +6,14 @@ import { useProfile } from '../hooks/useProfile';
 import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
 import Logo from './Logo';
+import { useContactLink } from '../hooks/useContactLink';
 
 export default function Layout() {
 	const { user, logout } = useAuthStore();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = useState(false);
+	const contactLink = useContactLink();
 
 	useProfile();
 
@@ -111,7 +113,7 @@ export default function Layout() {
 									)}
 									<Link
 										target="_blank"
-										to="https://usapayments.com/contact-us/"
+										to={contactLink}
 										className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
 									>
 										Contact Us
@@ -216,7 +218,7 @@ export default function Layout() {
 									)}
 									<Link
 										target="_blank"
-										to="https://usapayments.com/contact-us/"
+										to={contactLink}
 										className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
 										onClick={() => setIsOpen(false)}
 									>

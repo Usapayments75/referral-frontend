@@ -7,6 +7,7 @@ import { submitPublicReferral } from '../services/api/referral';
 import SuccessMessage from '../components/referrals/SuccessMessage';
 import { MessageCircle } from 'lucide-react';
 import { useParams } from 'react-router-dom';
+import { useContactLink } from '../hooks/useContactLink';
 
 interface ReferralForm {
   businessName: string;
@@ -25,6 +26,7 @@ export default function PublicReferral() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const contactLink = useContactLink();
 
 
   const { register, handleSubmit, formState: { errors } } = useForm<ReferralForm>({
@@ -99,7 +101,8 @@ ${data.description || 'None provided'}
           <nav className="hidden md:flex space-x-6">
             <a href="#analysis" className="text-gray-600 hover:text-gray-900">Get Free Analysis</a>
             <a href="#faq" className="text-gray-600 hover:text-gray-900">FAQ</a>
-            <a href="https://usapayments.com/contact-us/" className="text-gray-600 hover:text-gray-900">Contact Us</a>
+            <a  href={contactLink}  target="_blank"
+              rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">Contact Us</a>
           </nav>
         </div>
       </header>
@@ -296,7 +299,7 @@ ${data.description || 'None provided'}
       </footer>
 
       <a
-        href="https://usapayments.com/contact-us/"
+         href={contactLink}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 left-6 z-50 flex items-center gap-2 bg-blue-900 text-white px-4 py-3 rounded-md shadow-lg hover:bg-blue-800 transition-colors duration-200"
