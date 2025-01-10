@@ -6,6 +6,7 @@ import { formatPhoneNumber } from '../utils/countryData';
 import { submitPublicReferral } from '../services/api/referral';
 import SuccessMessage from '../components/referrals/SuccessMessage';
 import { MessageCircle } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 
 interface ReferralForm {
   businessName: string;
