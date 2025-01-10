@@ -18,6 +18,7 @@ import {
 } from './config/routes';
 import PublicReferral from './pages/PublicReferral';
 import FloatingContactButton from './components/ui/FloatingContactButton';
+import Settings from './pages/admin/Settings';
 
 function AppRoutes() {
 	const { initialize, isAuthenticated, user } = useAuthStore();
@@ -73,6 +74,7 @@ function AppRoutes() {
 						<Route path="/admin" element={<AdminDashboard />} />
 						<Route path="/admin/users" element={<UserManagement />} />
 						<Route path="/admin/tutorials" element={<TutorialManagement />} />
+						<Route path="/admin/settings" element={<Settings />} />
 					</Route>
 
 					{/* User Routes */}

@@ -25,6 +25,13 @@ export interface CreateTutorialInput {
   is_public: boolean;
 }
 
+export interface Setting {
+  key: string;
+  value: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface UpdateTutorialInput {
   title?: string;
   description?: string;
