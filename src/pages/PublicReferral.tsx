@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { MessageCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import BusinessTypeSelect from '../components/form/BusinessTypeSelect';
 import PhoneInput from '../components/PhoneInput';
+import BusinessTypeSelect from '../components/form/BusinessTypeSelect';
 import { formatPhoneNumber } from '../utils/countryData';
 import { submitPublicReferral } from '../services/api/referral';
 import SuccessMessage from '../components/referrals/SuccessMessage';
-import { MessageCircle } from 'lucide-react';
 
 interface ReferralForm {
-	businessName: string;
-	fullName: string;
-	email: string;
-	address: string;
-	city: string;
-	state: string;
-	zipCode: string;
-	phoneNumber: string;
-	countryCode: string;
-	businessType: string;
-	monthlyVolume: string;
-	smsConsent: boolean;
-	description: string;
+  businessName: string;
+  fullName: string;
+  email: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  phoneNumber: string;
+  countryCode: string;
+  businessType: string;
+  monthlyVolume: string;
+  smsConsent: boolean;
+  description: string;
 }
 
 const faqs = [
@@ -39,12 +40,13 @@ const faqs = [
 ];
 
 export default function PublicReferral() {
+	const { uuid } = useParams<{ uuid: string }>();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<ReferralForm>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ReferralForm>({
     defaultValues: {
       countryCode: '+1',
       smsConsent: false
@@ -52,28 +54,43 @@ export default function PublicReferral() {
   });
 
   const onSubmit = async (data: ReferralForm) => {
-    if (!uuid) return;
+    if (!uuid) {
+      setSubmitError('Invalid referral link');
+      return;
+    }
 
     setSubmitting(true);
     setSubmitError(null);
-    setSubmitSuccess(false);
 
     try {
       const formattedPhone = formatPhoneNumber(data.countryCode, data.phoneNumber);
+      
       await submitPublicReferral({
         uuid,
         firstName: data.fullName.split(' ')[0],
-        lastName: data.fullName.split(' ').slice(1).join(' '),
+        lastName: data.fullName.split(' ').slice(1).join(' ') || data.fullName.split(' ')[0],
         email: data.email,
         company: data.businessName,
         businessType: data.businessType,
         phoneNumber: formattedPhone,
-        description: `Monthly Volume: ${data.monthlyVolume}\nAddress: ${data.address}\nCity: ${data.city}\nState: ${data.state}\nZIP: ${data.zipCode}\n\nAdditional Notes: ${data.description}`
+        description: `
+Monthly Volume: $${data.monthlyVolume}
+Address: ${data.address}
+City: ${data.city}
+State: ${data.state}
+ZIP: ${data.zipCode}
+SMS Consent: ${data.smsConsent ? 'Yes' : 'No'}
+
+Additional Notes:
+${data.description || 'None provided'}
+        `.trim()
       });
+
       setSubmitSuccess(true);
       reset();
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'Failed to submit referral');
+      console.error('Referral submission error:', err);
     } finally {
       setSubmitting(false);
     }
@@ -128,7 +145,13 @@ export default function PublicReferral() {
           </h2>
           
           <div className="bg-white rounded-lg shadow-xl p-8">
-		  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {submitError && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+                  {submitError}
+                </div>
+              )}
+
               <div>
                 <label htmlFor="businessName" className="block text-sm font-medium text-gray-700">
                   Business Name<span className="text-red-500">*</span>
@@ -389,7 +412,9 @@ export default function PublicReferral() {
           </div>
         </div>
       </footer>
-	  <a
+
+      {/* Floating Contact Button */}
+      <a
         href="https://usapayments.com/contact-us/"
         target="_blank"
         rel="noopener noreferrer"
