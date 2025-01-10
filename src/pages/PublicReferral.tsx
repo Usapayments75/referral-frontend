@@ -47,7 +47,12 @@ export default function PublicReferral() {
         company: data.businessName,
         businessType: data.businessType,
         phoneNumber: formattedPhone,
-        description: data.description
+        description: `
+SMS Consent: ${data.smsConsent ? 'Yes' : 'No'}
+
+Additional Notes:
+${data.description || 'None provided'}
+        `.trim()
       });
       setSubmitSuccess(true);
     } catch (err) {
