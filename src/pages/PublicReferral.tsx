@@ -119,7 +119,7 @@ ${data.description || 'None provided'}
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 via-purple-900 to-red-900 text-white py-20">
+      <section className="bg-[linear-gradient(90deg,#0E314F_0%,#9B122C_100%)] text-white py-20">
         <div className="max-w-4xl mx-auto text-center px-6">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Save Up To 100% On<br />Payment Processing Fees
