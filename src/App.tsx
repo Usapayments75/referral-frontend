@@ -21,6 +21,7 @@ import FloatingContactButton from './components/ui/FloatingContactButton';
 import Settings from './pages/admin/Settings';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import UserSettings from './pages/UserSettings';
 
 function AppRoutes() {
   const { initialize, isAuthenticated, user } = useAuthStore();
@@ -107,6 +108,7 @@ function AppRoutes() {
             <Route path="/submit" element={<SubmitReferral />} />
             <Route path="/tutorials" element={<Tutorials />} />
             <Route path="/compensation" element={<Compensation />} />
+            <Route path="/settings" element={<UserSettings />} />
           </Route>
 
           {/* Root Route */}
