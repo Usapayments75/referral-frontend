@@ -3,6 +3,8 @@ import React from 'react';
 // Lazy load components
 export const Login = React.lazy(() => import('../pages/Login'));
 export const Register = React.lazy(() => import('../pages/Register'));
+export const ForgotPassword = React.lazy(() => import('../pages/ForgotPassword'));
+export const ResetPassword = React.lazy(() => import('../pages/ResetPassword'));
 export const Dashboard = React.lazy(() => import('../pages/Dashboard'));
 export const AdminDashboard = React.lazy(() => import('../pages/admin/AdminDashboard'));
 export const UserManagement = React.lazy(() => import('../pages/admin/UserManagement'));

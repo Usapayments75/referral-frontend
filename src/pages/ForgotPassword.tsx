@@ -1,53 +1,76 @@
 import React, { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Lock } from 'lucide-react';
-import { useAuthStore } from '../store/authStore';
+import { Link } from 'react-router-dom';
+import { KeyReset } from 'lucide-react';
+import api from '../services/axios';
 
-interface LoginForm {
+interface ForgotPasswordForm {
   email: string;
-  password: string;
 }
 
-export default function Login() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const login = useAuthStore((state) => state.login);
-  const [error, setError] = useState('');
+export default function ForgotPassword() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+  const { register, handleSubmit, formState: { errors } } = useForm<ForgotPasswordForm>();
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: ForgotPasswordForm) => {
     setIsSubmitting(true);
     setError('');
 
     try {
-      const result = await login(data.email, data.password);
-      if (result.success) {
-        navigate('/dashboard');
+      const response = await api.post('/users/forgot-password', {
+        email: data.email
+      });
+
+      if (response.data.status === 'success') {
+        setSuccess(true);
       } else {
-        setError(result.message);
+        setError(response.data.message || 'Failed to process request');
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (success) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="flex justify-center">
+            <KeyReset className="h-12 w-12 text-green-500" />
+          </div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Check your email
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            If an account exists with that email, we've sent password reset instructions.
+          </p>
+          <div className="mt-4 text-center">
+            <Link to="/login" className="font-medium text-red-600 hover:text-red-500">
+              Return to login
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <Lock className="h-12 w-12 text-red-500" />
+          <KeyReset className="h-12 w-12 text-red-500" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
+          Reset your password
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{' '}
-          <Link to="/register" className="font-medium text-red-600 hover:text-red-500">
-            create a new account
+          <Link to="/login" className="font-medium text-red-600 hover:text-red-500">
+            return to login
           </Link>
         </p>
       </div>
@@ -58,12 +81,6 @@ export default function Login() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
                 {error}
-              </div>
-            )}
-
-            {location.state?.message && (
-              <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md text-sm">
-                {location.state.message}
               </div>
             )}
 
@@ -93,33 +110,6 @@ export default function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  type="password"
-                  autoComplete="current-password"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
-                  {...register('password', { required: 'Password is required' })}
-                  disabled={isSubmitting}
-                />
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="text-sm">
-                <Link to="/forgot-password" className="font-medium text-red-600 hover:text-red-500">
-                  Forgot your password?
-                </Link>
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -128,10 +118,10 @@ export default function Login() {
                 {isSubmitting ? (
                   <div className="flex items-center">
                     <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                    Signing in...
+                    Sending...
                   </div>
                 ) : (
-                  'Sign in'
+                  'Send reset instructions'
                 )}
               </button>
             </div>
