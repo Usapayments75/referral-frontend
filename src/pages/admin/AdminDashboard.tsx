@@ -56,75 +56,35 @@ export default function AdminDashboard() {
         />
       </div>
 
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="px-6 py-5 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">Latest Users</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            Recently registered users in the system
-          </p>
-        </div>
-        <div className="min-w-full align-middle">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Joined
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {stats?.latestUsers?.map((user) => (
-                <tr key={user.uuid}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {user.full_name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      user.role === 'admin' 
-                        ? 'bg-purple-100 text-purple-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Users */}
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200">
+            <h2 className="text-lg font-medium text-gray-900">Recent Users</h2>
+            <p className="mt-1 text-sm text-gray-500">
+              Latest registered users in the system
+            </p>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {stats?.recentUsers?.map((user) => (
+              <div key={user.uuid} className="px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{user.full_name}</p>
+                    <p className="text-sm text-gray-500">{user.email}</p>
+                  </div>
+                  <p className="text-sm text-gray-500">
                     {formatDateTime(user.created_at)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      user.active 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {user.active ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {(!stats?.latestUsers || stats.latestUsers.length === 0) && (
-                <tr>
-                  <td colSpan={5} className="px-6 py-4 text-sm text-gray-500 text-center">
-                    No users found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                  </p>
+                </div>
+              </div>
+            ))}
+            {(!stats?.recentUsers || stats.recentUsers.length === 0) && (
+              <div className="px-6 py-4 text-sm text-gray-500 text-center">
+                No recent users
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
