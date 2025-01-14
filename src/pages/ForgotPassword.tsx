@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { KeyReset } from 'lucide-react';
+import { KeyIcon } from 'lucide-react';
 import api from '../services/axios';
 
 interface ForgotPasswordForm {
@@ -40,7 +40,7 @@ export default function ForgotPassword() {
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
-            <KeyReset className="h-12 w-12 text-green-500" />
+            <KeyIcon className="h-12 w-12 text-green-500" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Check your email
@@ -62,7 +62,7 @@ export default function ForgotPassword() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <KeyReset className="h-12 w-12 text-red-500" />
+          <KeyIcon className="h-12 w-12 text-red-500" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Reset your password
