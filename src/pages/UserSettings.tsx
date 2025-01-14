@@ -16,7 +16,7 @@ export default function UserSettings() {
   useEffect(() => {
     const fetchPixelId = async () => {
       try {
-        const response = await api.get('/user/get-pixel-id');
+        const response = await api.get('/users/user/get-pixel-id');
         if (response.data.status === 'success') {
           setValue('facebook_pixel_id', response.data.data.facebook_pixel_id || '');
         }
@@ -34,7 +34,7 @@ export default function UserSettings() {
     setSuccess(false);
 
     try {
-      const response = await api.put('/users/user/update-pixel-id', {
+      const response = await api.put('/users/update-pixel-id', {
         facebook_pixel_id: data.facebook_pixel_id
       });
 
