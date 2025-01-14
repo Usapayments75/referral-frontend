@@ -25,6 +25,17 @@ export interface CreateTutorialInput {
   is_public: boolean;
 }
 
+export interface AdminUser extends User {
+  active: boolean;
+}
+
+export interface AdminStats {
+  totalUsers: number;
+  activeUsers: number;
+  totalTutorials: number;
+  latestUsers: AdminUser[];
+}
+
 export interface Setting {
   key: string;
   value: string;
@@ -95,16 +106,16 @@ export interface Deal {
   Created_Time: string;
 }
 
-export interface AdminStats {
-  totalUsers: number;
-  activeUsers: number;
-  totalTutorials: number;
-  recentActivity: Array<{
-    user: string;
-    action: string;
-    timeAgo: string;
-  }>;
-}
+// export interface AdminStats {
+//   totalUsers: number;
+//   activeUsers: number;
+//   totalTutorials: number;
+//   recentActivity: Array<{
+//     user: string;
+//     action: string;
+//     timeAgo: string;
+//   }>;
+// }
 
 export interface AuthResponse {
   status: string;
