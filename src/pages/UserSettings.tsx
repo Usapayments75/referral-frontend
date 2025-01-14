@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Settings as SettingsIcon } from 'lucide-react';
+import { useAuthStore } from '../store/authStore';
 import api from '../services/axios';
 
 interface SettingsForm {
@@ -8,6 +9,7 @@ interface SettingsForm {
 }
 
 export default function UserSettings() {
+  const { user, token } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -16,7 +18,11 @@ export default function UserSettings() {
   useEffect(() => {
     const fetchPixelId = async () => {
       try {
-        const response = await api.get('/users/user/get-pixel-id');
+        const response = await api.get('/users/user/get-pixel-id', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         if (response.data.status === 'success') {
           setValue('facebook_pixel_id', response.data.data.facebook_pixel_id || '');
         }
@@ -25,8 +31,10 @@ export default function UserSettings() {
       }
     };
 
-    fetchPixelId();
-  }, [setValue]);
+    if (token) {
+      fetchPixelId();
+    }
+  }, [token, setValue]);
 
   const onSubmit = async (data: SettingsForm) => {
     setIsSubmitting(true);
@@ -34,9 +42,14 @@ export default function UserSettings() {
     setSuccess(false);
 
     try {
-      const response = await api.put('/users/update-pixel-id', {
-        facebook_pixel_id: data.facebook_pixel_id
-      });
+      const response = await api.put('/users/update-pixel-id', 
+        { facebook_pixel_id: data.facebook_pixel_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
 
       if (response.data.status === 'success') {
         setSuccess(true);
