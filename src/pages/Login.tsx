@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Lock } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import Logo from '../components/Logo';
 
 interface LoginForm {
   email: string;
@@ -39,7 +39,7 @@ export default function Login() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <Lock className="h-12 w-12 text-red-500" />
+          <Logo />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to your account

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { KeyRound } from 'lucide-react';
 import api from '../services/axios';
+import Logo from '../components/Logo';
 
 interface ResetPasswordForm {
   new_password: string;
@@ -70,7 +71,7 @@ export default function ResetPassword() {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <KeyRound className="h-12 w-12 text-red-500" />
+          <Logo />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Set new password

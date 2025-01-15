@@ -1,7 +1,7 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import SelectField from './SelectField';
-import { BUSINESS_TYPES } from '../../constants/businessTypes';
+import FormLabel from './FormLabel';
+import FormError from './FormError';
 
 interface BusinessTypeSelectProps {
   register: UseFormRegister<any>;
@@ -11,17 +11,19 @@ interface BusinessTypeSelectProps {
 
 export default function BusinessTypeSelect({ register, disabled, error }: BusinessTypeSelectProps) {
   return (
-    <SelectField
-      id="businessType"
-      label="Business Type"
-      options={BUSINESS_TYPES}
-      register={register}
-      name="businessType"
-      rules={{ required: 'Business type is required' }}
-      disabled={disabled}
-      error={error}
-      placeholder="Select business type"
-      required
-    />
+    <div>
+      <FormLabel htmlFor="businessType" required>Industry</FormLabel>
+      <input
+        type="text"
+        id="businessType"
+        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 ${
+          error ? 'border-red-300' : ''
+        }`}
+        placeholder="Enter your industry"
+        {...register('businessType', { required: 'Industry is required' })}
+        disabled={disabled}
+      />
+      <FormError error={error} />
+    </div>
   );
 }

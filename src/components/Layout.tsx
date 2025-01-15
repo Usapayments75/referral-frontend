@@ -87,7 +87,7 @@ export default function Layout() {
                     to="/admin/tutorials"
                     className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
                   >
-                    Tutorials
+                    Resources
                   </Link>
                   <Link
                     to="/admin/settings"
@@ -108,7 +108,7 @@ export default function Layout() {
                     to="/tutorials"
                     className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
                   >
-                    Tutorials
+                    Resources
                   </Link>
                   {user?.compensation_link ? (
                     <a
@@ -207,7 +207,7 @@ export default function Layout() {
                     className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
                     onClick={() => setIsOpen(false)}
                   >
-                    Tutorials
+                    Resources
                   </Link>
                   <Link
                     to="/admin/settings"
@@ -231,7 +231,7 @@ export default function Layout() {
                     className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
                     onClick={() => setIsOpen(false)}
                   >
-                    Tutorials
+                    Resources
                   </Link>
                   {user?.compensation_link ? (
                     <a

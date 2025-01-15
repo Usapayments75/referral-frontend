@@ -4,6 +4,7 @@ import CountryCodeSelect from './form/CountryCodeSelect';
 import PhoneNumberInput from './form/PhoneNumberInput';
 import FormError from './form/FormError';
 import FormHelperText from './form/FormHelperText';
+import FormLabel from './form/FormLabel';
 
 interface PhoneInputProps {
   register: UseFormRegister<any>;
@@ -14,9 +15,9 @@ interface PhoneInputProps {
 export default function PhoneInput({ register, errors, disabled }: PhoneInputProps) {
   return (
     <div>
-      <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+      <FormLabel htmlFor="phoneNumber" required>
         Phone Number
-      </label>
+      </FormLabel>
       <div className="mt-1 flex rounded-md shadow-sm">
         <CountryCodeSelect
           register={register}

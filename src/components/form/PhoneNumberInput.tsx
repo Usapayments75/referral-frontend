@@ -17,7 +17,10 @@ export default function PhoneNumberInput({ register, disabled, error }: PhoneNum
       className={`block w-full flex-1 rounded-r-md border-l-0 border-gray-300 focus:border-red-500 focus:ring-red-500 sm:text-sm ${
         error ? 'border-red-300' : ''
       }`}
-      {...register('phoneNumber', phoneNumberValidation)}
+      {...register('phoneNumber', {
+        ...phoneNumberValidation,
+        required: 'Phone number is required'
+      })}
       disabled={disabled}
     />
   );

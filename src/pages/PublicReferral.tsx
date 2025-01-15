@@ -135,7 +135,7 @@ ${data.description || 'None provided'}
 						Save Up To 100% On<br />Payment Processing Fees
 					</h1>
 					<p className="text-lg md:text-xl mb-8 opacity-90">
-						Discover how USA Payments can optimize your business's payment systems,<br />
+						Discover how USA Payments can optimize your business payment systems,<br />
 						reduce costs, and boost your bottom line.
 					</p>
 					<a
