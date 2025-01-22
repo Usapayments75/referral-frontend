@@ -89,36 +89,4 @@ api.interceptors.response.use(
     }
 );
 
-// Add request retry logic
-api.interceptors.response.use(undefined, async (error: AxiosError) => {
-    const config = error.config;
-
-    // Only retry on network errors or 5xx server errors
-    if (
-        !config ||
-        !error.response ||
-        config.retryCount >= 3 ||
-        error.response.status < 500
-    ) {
-        return Promise.reject(error);
-    }
-
-    // Increment retry count
-    config.retryCount = (config.retryCount || 0) + 1;
-
-    // Exponential backoff delay
-    const backoffDelay = Math.pow(2, config.retryCount) * 1000;
-
-    await new Promise(resolve => setTimeout(resolve, backoffDelay));
-
-    return api(config);
-});
-
-// Type augmentation for axios config
-declare module 'axios' {
-    export interface InternalAxiosRequestConfig {
-        retryCount?: number;
-    }
-}
-
 export default api;
