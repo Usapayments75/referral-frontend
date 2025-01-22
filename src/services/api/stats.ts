@@ -65,6 +65,18 @@ export async function getStats(signal?: AbortSignal): Promise<Stats> {
       }
     };
   } catch (error) {
+    if (error.response?.status === 500) {
+      return {
+        totalReferrals: 0,
+        conversionRate: 0,
+        activeLeads: 0,
+        monthlyGrowth: {
+          referrals: 0,
+          conversion: 0,
+          leads: 0
+        }
+      };
+    }
     if (error instanceof ApiError && error.message === 'Request cancelled') {
       throw error;
     }

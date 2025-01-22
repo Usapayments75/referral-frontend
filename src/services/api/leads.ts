@@ -3,8 +3,6 @@ import { Referral, ReferralStatus } from '../../types';
 import { ZohoLeadResponse, ReferralSubmission, ZohoResponse } from './types';
 import { handleApiError } from './errorHandler';
 
-
-
 export async function getLeads(params?: LeadsParams, signal?: AbortSignal): Promise<Referral[]> {
   try {
     // Format dates for API
@@ -33,11 +31,12 @@ export async function getLeads(params?: LeadsParams, signal?: AbortSignal): Prom
       Contact_Number: lead.Contact_Number
     }));
   } catch (error) {
+    if (error.response?.status === 500) {
+      return [];
+    }
     return handleApiError(error);
   }
 }
-
-
 
 export async function submitReferral(referral: ReferralSubmission): Promise<void> {
   try {
@@ -46,7 +45,7 @@ export async function submitReferral(referral: ReferralSubmission): Promise<void
       First_Name: referral.firstName,
       Email: referral.email,
       Company: referral.company,
-      Business_Type: referral.businessType, // Added business type to payload
+      Business_Type: referral.businessType,
       Title: referral.title,
       Description: referral.description,
     });
@@ -77,6 +76,9 @@ export async function submitReferral(referral: ReferralSubmission): Promise<void
       noteId: noteData.details.id,
     });
   } catch (error) {
+    if (error.response?.status === 500) {
+      throw new Error('Server error. Please try again later.');
+    }
     handleApiError(error);
   }
 }

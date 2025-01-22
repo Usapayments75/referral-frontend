@@ -14,6 +14,9 @@ export async function getDeals(signal?: AbortSignal): Promise<Deal[]> {
       Created_Time: deal.Created_Time
     }));
   } catch (error) {
+    if (error.response?.status === 500) {
+      return [];
+    }
     return handleApiError(error);
   }
 }
