@@ -5,6 +5,6 @@ export function useProfile() {
   const { refreshProfile } = useAuthStore();
 
   useEffect(() => {
-    refreshProfile();
+    refreshProfile();  
   }, [refreshProfile]);
 }
