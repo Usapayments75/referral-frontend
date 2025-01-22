@@ -101,7 +101,7 @@ export function useApi<T>(
         abortControllerRef.current.abort();
       }
     };
-  }, [fetchData]);
+  }, []);
 
   const refetch = useCallback(() => fetchData(true), [fetchData]);
 

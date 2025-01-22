@@ -27,21 +27,24 @@ export function useDashboardData() {
     useApi(signal => zohoService.getLeads({ period: timePeriod }, signal), { 
       defaultValue: [], 
       cacheKey: `dashboard-referrals-${timePeriod}`,
-      cacheDuration: CACHE_DURATION
+      cacheDuration: CACHE_DURATION,
+      retry: false // Disable retries
     });
 
   const { data: deals, loading: dealsLoading, error: dealsError } = 
     useApi(signal => zohoService.getDeals(signal), { 
       defaultValue: [], 
       cacheKey: 'dashboard-deals',
-      cacheDuration: CACHE_DURATION
+      cacheDuration: CACHE_DURATION,
+      retry: false // Disable retries
     });
 
   const { data: stats, loading: statsLoading, error: statsError } = 
     useApi(signal => zohoService.getStats(signal), { 
       defaultValue: defaultData.stats,
       cacheKey: 'dashboard-stats',
-      cacheDuration: CACHE_DURATION
+      cacheDuration: CACHE_DURATION,
+      retry: false // Disable retries
     });
 
   // Only show actual errors, not "no data" responses
