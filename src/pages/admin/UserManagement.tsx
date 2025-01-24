@@ -11,10 +11,10 @@ const ITEMS_PER_PAGE = 10;
 export default function UserManagement() {
 	const [users, setUsers] = useState<User[]>([]);
 	const [pagination, setPagination] = useState<PaginationMetadata>({
-	  total: 0,
-	  totalPages: 0,
-	  currentPage: 1,
-	  limit: ITEMS_PER_PAGE
+		total: 0,
+		totalPages: 0,
+		currentPage: 1,
+		limit: ITEMS_PER_PAGE
 	});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,8 @@ export default function UserManagement() {
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 	const [isPixelIdModalOpen, setIsPixelIdModalOpen] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
-  
+	const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
 	useEffect(() => {
 		fetchUsers(pagination.currentPage);
 	}, [pagination.currentPage]);
@@ -45,24 +46,22 @@ export default function UserManagement() {
 		if (!selectedUser) return;
 		setIsSubmitting(true);
 		try {
-		  await userService.updatePixelId(selectedUser.email, data.pixelId);
-		  setIsPixelIdModalOpen(false);
-		  setSelectedUser(null);
-		  setError(null);
+			await userService.updatePixelId(selectedUser.email, data.pixelId);
+			setIsPixelIdModalOpen(false);
+			setSelectedUser(null);
+			setError(null);
 		} catch (err) {
-		  setError(err instanceof Error ? err.message : 'Failed to update Facebook Pixel ID');
+			setError(err instanceof Error ? err.message : 'Failed to update Facebook Pixel ID');
 		} finally {
-		  setIsSubmitting(false);
+			setIsSubmitting(false);
 		}
-	  };
-	
+	};
 
 	const handleEditPixelId = (user: User) => {
 		setSelectedUser(user);
 		setIsPixelIdModalOpen(true);
-	  };
-	 
-	  
+	};
+
 	const handlePageChange = (page: number) => {
 		setPagination(prev => ({ ...prev, currentPage: page }));
 	};
@@ -75,6 +74,23 @@ export default function UserManagement() {
 	const handleEditPassword = (user: User) => {
 		setSelectedUser(user);
 		setIsPasswordModalOpen(true);
+	};
+
+	const handleSendPasswordReset = async (user: User) => {
+		if (!window.confirm('Are you sure you want to send a password reset email to this user?')) {
+			return;
+		}
+
+		setIsSubmitting(true);
+		try {
+			await userService.triggerPasswordReset(user.email);
+			setSuccessMessage('Password reset email sent successfully');
+			setTimeout(() => setSuccessMessage(null), 5000); // Clear success message after 5 seconds
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to send password reset email');
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	const handleUpdateCompensationLink = async (data: { compensationLink: string }) => {
@@ -232,6 +248,15 @@ export default function UserManagement() {
 				</div>
 			)}
 
+			{successMessage && (
+				<div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md flex items-center">
+					<svg className="h-5 w-5 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+					</svg>
+					{successMessage}
+				</div>
+			)}
+
 			<div className="bg-white shadow rounded-lg overflow-hidden">
 				<table className="min-w-full divide-y divide-gray-200">
 					<thead className="bg-gray-50">
@@ -301,12 +326,18 @@ export default function UserManagement() {
 													Update Password
 												</button>
 												<button
+													onClick={() => handleSendPasswordReset(user)}
+													className="text-orange-600 hover:text-orange-900"
+													disabled={isSubmitting}
+												>
+													Send Reset Link
+												</button>
+												<button
 													onClick={() => handleEditPixelId(user)}
 													className="text-green-600 hover:text-green-900"
 												>
 													Update Pixel ID
 												</button>
-
 											</>
 										)}
 									</div>

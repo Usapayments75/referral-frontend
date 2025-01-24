@@ -93,6 +93,22 @@ export const userService = {
 			}
 			throw new Error('Failed to update Facebook Pixel ID');
 		}
-	}
+	},
 
+	async triggerPasswordReset(identifier: string): Promise<void> {
+		try {
+			const response = await api.post('/users/admin/trigger-reset-password', {
+				identifier
+			});
+
+			if (response.data.status !== 'success') {
+				throw new Error(response.data.message || 'Failed to send password reset email');
+			}
+		} catch (error) {
+			if (error instanceof Error) {
+				throw new Error(error.message);
+			}
+			throw new Error('Failed to send password reset email');
+		}
+	}
 };
