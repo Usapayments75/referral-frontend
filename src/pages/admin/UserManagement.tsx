@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AlertCircle, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { User, PaginationMetadata } from '../../types';
 import { userService } from '../../services/userService';
 import CompensationLinkModal from './CompensationLinkModal';
 import UpdatePasswordModal from './UpdatePasswordModal';
 import UpdatePixelIdModal from './UpdatePixelIdModal';
+import { useDebounce } from '../../hooks/useDebounce';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -24,14 +25,17 @@ export default function UserManagement() {
 	const [isPixelIdModalOpen, setIsPixelIdModalOpen] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
+	const [searchEmail, setSearchEmail] = useState('');
+	const debouncedSearchEmail = useDebounce(searchEmail, 500);
 
 	useEffect(() => {
-		fetchUsers(pagination.currentPage);
-	}, [pagination.currentPage]);
+		fetchUsers(pagination.currentPage, debouncedSearchEmail);
+	}, [pagination.currentPage, debouncedSearchEmail]);
 
-	const fetchUsers = async (page: number) => {
+	const fetchUsers = async (page: number, email: string = '') => {
 		try {
-			const response = await userService.getAllUsers(page, ITEMS_PER_PAGE);
+			setLoading(true);
+			const response = await userService.getAllUsers(page, ITEMS_PER_PAGE, email);
 			setUsers(response.data);
 			setPagination(response.pagination);
 			setError(null);
@@ -85,7 +89,7 @@ export default function UserManagement() {
 		try {
 			await userService.triggerPasswordReset(user.email);
 			setSuccessMessage('Password reset email sent successfully');
-			setTimeout(() => setSuccessMessage(null), 5000); // Clear success message after 5 seconds
+			setTimeout(() => setSuccessMessage(null), 5000);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to send password reset email');
 		} finally {
@@ -100,7 +104,7 @@ export default function UserManagement() {
 		try {
 			const response = await userService.updateCompensationLink(selectedUser.uuid, data.compensationLink);
 			if (response) {
-				await fetchUsers(pagination.currentPage);
+				await fetchUsers(pagination.currentPage, searchEmail);
 				setIsCompensationModalOpen(false);
 				setSelectedUser(null);
 				setError(null);
@@ -222,7 +226,7 @@ export default function UserManagement() {
 		return buttons;
 	};
 
-	if (loading) {
+	if (loading && users.length === 0) {
 		return (
 			<div className="flex justify-center items-center min-h-screen">
 				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
@@ -239,6 +243,20 @@ export default function UserManagement() {
 						Manage users and their compensation links
 					</p>
 				</div>
+			</div>
+
+			{/* Search Bar */}
+			<div className="relative">
+				<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+					<Search className="h-5 w-5 text-gray-400" />
+				</div>
+				<input
+					type="email"
+					placeholder="Search by email..."
+					value={searchEmail}
+					onChange={(e) => setSearchEmail(e.target.value)}
+					className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-red-500 focus:border-red-500 sm:text-sm"
+				/>
 			</div>
 
 			{error && (

@@ -17,9 +17,18 @@ interface UserResponse {
 }
 
 export const userService = {
-	async getAllUsers(page: number = 1, limit: number = 10): Promise<PaginatedResponse<User>> {
+	async getAllUsers(page: number = 1, limit: number = 10, email: string = ''): Promise<PaginatedResponse<User>> {
 		try {
-			const response = await api.get<UserResponse>(`/admin/users?page=${page}&limit=${limit}`);
+			const queryParams = new URLSearchParams({
+				page: page.toString(),
+				limit: limit.toString()
+			});
+
+			if (email) {
+				queryParams.append('email', email);
+			}
+
+			const response = await api.get<UserResponse>(`/admin/users?${queryParams.toString()}`);
 			if (response.data.status !== 'success' || !response.data.data.users || !response.data.data.pagination) {
 				throw new Error(response.data.message || 'Failed to fetch users');
 			}
