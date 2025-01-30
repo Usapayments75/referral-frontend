@@ -30,6 +30,7 @@ export const userService = {
 
 			const response = await api.get<UserResponse>(`/admin/users?${queryParams.toString()}`);
 			if (response.data.status !== 'success' || !response.data.data.users || !response.data.data.pagination) {
+				console.log("🚀 ~ getAllUsers ~ response:", response)
 				throw new Error(response.data.message || 'Failed to fetch users');
 			}
 			return {

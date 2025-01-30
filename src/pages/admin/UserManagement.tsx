@@ -40,6 +40,7 @@ export default function UserManagement() {
 			setPagination(response.pagination);
 			setError(null);
 		} catch (err) {
+			console.log("🚀 ~ fetchUsers ~ err:", err)
 			setError(err instanceof Error ? err.message : 'Failed to fetch users');
 		} finally {
 			setLoading(false);
