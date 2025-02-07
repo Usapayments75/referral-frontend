@@ -41,7 +41,7 @@ api.interceptors.response.use(
 
                     // Only redirect if we're not already on the login or register page
                     const currentPath = window.location.pathname;
-                    if (!['/login', '/register'].includes(currentPath)) {
+                    if (!['/login'].includes(currentPath)) {
                         window.location.href = '/login';
                     }
                     break;

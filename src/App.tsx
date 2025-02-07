@@ -47,14 +47,14 @@ function AppRoutes() {
             </PublicRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/register"
           element={
             <PublicRoute>
               <Register />
             </PublicRoute>
           }
-        />
+        /> */}
         <Route
           path="/forgot-password"
           element={
