@@ -45,7 +45,7 @@ export default function Login() {
           Sign in to your account
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Or{' '}
+          {/* Or{' '} */}
           {/* <Link to="/register" className="font-medium text-red-600 hover:text-red-500">
             create a new account
           </Link> */}
