@@ -70,7 +70,7 @@ export const userService = {
 
 	async updatePassword(email: string, newPassword: string, confirmNewPassword: string): Promise<void> {
 		try {
-			const response = await api.put('/users/admin/update-password', {
+			const response = await api.put('/users/contacts/update-password', {
 				email,
 				new_password: newPassword,
 				confirm_new_password: confirmNewPassword

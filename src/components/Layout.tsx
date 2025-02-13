@@ -89,6 +89,12 @@ export default function Layout() {
 								My Commissions
 							</button>
 						)}
+						<Link
+							to="/sub-accounts"
+							className={`hover:text-gray-600 ${isActive('/sub-accounts') ? 'text-red-600' : ''}`}
+						>
+							Sub Accounts
+						</Link>
 						{user && (
 							<CopyLinkButton link={getReferralLink(user)} />
 						)}

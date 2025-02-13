@@ -15,7 +15,8 @@ import {
 	TutorialManagement,
 	SubmitReferral,
 	Tutorials,
-	Compensation
+	Compensation,
+	SubAccounts
 } from './config/routes';
 import PublicReferral from './pages/PublicReferral';
 import FloatingContactButton from './components/ui/FloatingContactButton';
@@ -109,6 +110,8 @@ function AppRoutes() {
 						<Route path="/tutorials" element={<Tutorials />} />
 						<Route path="/compensation" element={<Compensation />} />
 						<Route path="/settings" element={<UserSettings />} />
+						<Route path="/sub-accounts" element={<SubAccounts />} />
+
 					</Route>
 					
 

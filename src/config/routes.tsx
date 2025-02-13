@@ -14,3 +14,4 @@ export const Settings = React.lazy(() => import('../pages/admin/Settings'));
 export const SubmitReferral = React.lazy(() => import('../pages/SubmitReferral'));
 export const Tutorials = React.lazy(() => import('../pages/Tutorials'));
 export const Compensation = React.lazy(() => import('../pages/Compensation'));
+export const SubAccounts = React.lazy(() => import('../pages/SubAccounts'));
