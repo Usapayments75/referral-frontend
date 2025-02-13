@@ -5,9 +5,23 @@ import EmptyState from './EmptyState';
 
 interface ContactDealsTableProps {
   leads: ContactLead[];
+  loading?: boolean;
 }
 
-export default function ContactDealsTable({ leads }: ContactDealsTableProps) {
+export default function ContactDealsTable({ leads, loading }: ContactDealsTableProps) {
+  if (loading) {
+    return (
+      <div className="bg-white shadow rounded-lg overflow-hidden mt-6">
+        <div className="px-6 py-5 border-b border-gray-200">
+          <h3 className="text-lg font-medium leading-6 text-gray-900">My Deals</h3>
+        </div>
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-600"></div>
+        </div>
+      </div>
+    );
+  }
+
   if (!leads || leads.length === 0) {
     return (
       <div className="bg-white shadow rounded-lg overflow-hidden mt-6">
