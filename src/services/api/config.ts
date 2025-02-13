@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { RetryConfig, shouldRetry, getRetryDelay } from './retryConfig';
 
-export const API_BASE_URL = 'https://api-partnerportal.usapayments.com/api/v1';
+// export const API_BASE_URL = 'https://api-partnerportal.usapayments.com/api/v1';
 // export const API_BASE_URL = 'http://localhost:5000/api/v1';
-
+export const API_BASE_URL = 'https://stage-api-partnerportal.usapayments.com/api/v1';
 export const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -13,7 +13,7 @@ export const api = axios.create({
   timeout: 30000, // Increased timeout to 30 seconds
   maxRetries: 3,
   retryDelay: 1000
-});
+}); 
 
 // Add auth token to requests
 api.interceptors.request.use(
