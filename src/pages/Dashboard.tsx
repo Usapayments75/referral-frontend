@@ -6,6 +6,7 @@ import ContactDealsTable from '../components/ContactDealsTable';
 import AsyncBoundary from '../components/AsyncBoundary';
 import { useDashboardData } from '../hooks/useDashboardData';
 import { useAuthStore } from '../store/authStore';
+import SubAccountReferralsTable from '../components/SubAccountReferralsTable';
 
 export default function Dashboard() {
 	const {
@@ -16,6 +17,7 @@ export default function Dashboard() {
 		loading,
 		error,
 		timePeriod,
+		subAccountLeads,
 		onTimePeriodChange
 	} = useDashboardData();
 	const { user } = useAuthStore();
@@ -74,6 +76,7 @@ export default function Dashboard() {
 					onTimePeriodChange={onTimePeriodChange}
 				/>
 				<DealsTable deals={deals} />
+				<SubAccountReferralsTable leads={subAccountLeads || []} loading={loading} />
 			</div>
 		</AsyncBoundary>
 	);

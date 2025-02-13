@@ -12,6 +12,6 @@ export const TutorialManagement = React.lazy(() => import('../pages/admin/Tutori
 export const UserSettings = React.lazy(() => import('../pages/UserSettings'));
 export const Settings = React.lazy(() => import('../pages/admin/Settings'));
 export const SubmitReferral = React.lazy(() => import('../pages/SubmitReferral'));
-export const Tutorials = React.lazy(() => import('../pages/Tutorials'));
+export const Resources = React.lazy(() => import('../pages/Tutorials')); // Updated name
 export const Compensation = React.lazy(() => import('../pages/Compensation'));
 export const SubAccounts = React.lazy(() => import('../pages/SubAccounts'));

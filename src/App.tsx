@@ -14,9 +14,9 @@ import {
 	UserManagement,
 	TutorialManagement,
 	SubmitReferral,
-	Tutorials,
 	Compensation,
-	SubAccounts
+	SubAccounts,
+	Resources
 } from './config/routes';
 import PublicReferral from './pages/PublicReferral';
 import FloatingContactButton from './components/ui/FloatingContactButton';
@@ -107,7 +107,7 @@ function AppRoutes() {
 					>
 						<Route path="/dashboard" element={<Dashboard />} />
 						<Route path="/submit" element={<SubmitReferral />} />
-						<Route path="/tutorials" element={<Tutorials />} />
+						<Route path="/tutorials" element={<Resources />} />
 						<Route path="/compensation" element={<Compensation />} />
 						<Route path="/settings" element={<UserSettings />} />
 						<Route path="/sub-accounts" element={<SubAccounts />} />
