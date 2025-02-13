@@ -1,5 +1,3 @@
-"use strict";
-
 import { Users, TrendingUp, Target } from 'lucide-react';
 import StatsCard from '../components/StatsCard';
 import ReferralTable from '../components/ReferralTable';
@@ -21,7 +19,6 @@ export default function Dashboard() {
 		onTimePeriodChange
 	} = useDashboardData();
 	const { user } = useAuthStore();
-	console.log("🚀 ~ AppRoutes ~ user:", user)
 
 	const formatChange = (value: number, isPercentage: boolean = false) => {
 		if (value === 0) return 'No change vs last month';
@@ -29,23 +26,26 @@ export default function Dashboard() {
 		return `${prefix}${value}${isPercentage ? '%' : ''} vs last month`;
 	};
 
-	if (user?.role == 'contact') {
+	if (user?.role === 'contact') {
 		return (
-			<div className="space-y-6">
-				<div className="sm:flex sm:items-center">
-					<div className="sm:flex-auto">
-						<h1 className="text-2xl font-semibold text-gray-900">My Deals</h1>
-						<p className="mt-2 text-sm text-gray-700">
-							View and manage your assigned deals
-						</p>
+			<AsyncBoundary loading={loading} error={error}>
+				<div className="space-y-6">
+					<div className="sm:flex sm:items-center">
+						<div className="sm:flex-auto">
+							<h1 className="text-2xl font-semibold text-gray-900">My Deals</h1>
+							<p className="mt-2 text-sm text-gray-700">
+								View and manage your assigned deals
+							</p>
+						</div>
 					</div>
+					<ContactDealsTable leads={contactLeads || []} loading={loading} />
 				</div>
-				<ContactDealsTable leads={contactLeads || []} loading={loading} />
-			</div>
+			</AsyncBoundary>
 		);
 	}
 
 	return (
+		
 		<AsyncBoundary loading={loading} error={error}>
 			<div className="space-y-6">
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">

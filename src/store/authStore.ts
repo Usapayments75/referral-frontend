@@ -30,8 +30,13 @@ export const useAuthStore = create<AuthState>()(
 					try {
 						const user = JSON.parse(userData);
 						set({ user, isAuthenticated: true, token, isInitialized: true });
-						// Refresh profile on initialization
-						get().refreshProfile().catch(console.error);
+						// Refresh profile on initialization with error handling
+						get().refreshProfile().catch(() => {
+							// If refresh fails, clear auth state
+							localStorage.removeItem('token');
+							localStorage.removeItem('user');
+							set({ user: null, isAuthenticated: false, token: null, isInitialized: true });
+						});
 					} catch {
 						localStorage.removeItem('token');
 						localStorage.removeItem('user');
@@ -57,6 +62,7 @@ export const useAuthStore = create<AuthState>()(
 						localStorage.removeItem('user');
 						set({ user: null, isAuthenticated: false, token: null });
 					}
+					throw error; // Re-throw to be handled by caller
 				}
 			},
 			login: async (email: string, password: string) => {

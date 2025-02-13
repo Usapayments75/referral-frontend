@@ -99,7 +99,7 @@ function AppRoutes() {
 					{/* User Routes */}
 					<Route
 						element={
-							<ProtectedRoute requiredRole="user">
+							<ProtectedRoute requiredRole={user?.role}>
 								<Outlet />
 							</ProtectedRoute>
 						}
@@ -110,6 +110,7 @@ function AppRoutes() {
 						<Route path="/compensation" element={<Compensation />} />
 						<Route path="/settings" element={<UserSettings />} />
 					</Route>
+					
 
 					{/* Root Route */}
 					<Route

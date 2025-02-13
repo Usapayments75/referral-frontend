@@ -126,7 +126,7 @@ export default function Layout() {
 					</>
 				);
 			default:
-				return null;
+				return "null";
 		}
 	};
 

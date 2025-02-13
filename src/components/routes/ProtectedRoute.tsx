@@ -8,6 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
+  console.log("🚀 ~ ProtectedRoute ~ requiredRole:", requiredRole)
   const { isAuthenticated, user } = useAuthStore();
   const location = useLocation();
 
