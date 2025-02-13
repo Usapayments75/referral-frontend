@@ -2,7 +2,7 @@ export interface User {
   uuid: string;
   full_name: string;
   email: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'contact';
   partner_id?: string;
   compensation_link: string | null;
   created_at?: string;

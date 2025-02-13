@@ -25,6 +25,111 @@ export default function Layout() {
     navigate('/login');
   };
 
+
+  const renderNavLinks = () => {
+    switch (user?.role) {
+      case 'admin':
+        return (
+          <>
+            <Link
+              to="/admin"
+              className={`hover:text-gray-600 ${isActive('/admin') ? 'text-red-600' : ''}`}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/admin/users"
+              className={`hover:text-gray-600 ${isActive('/admin/users') ? 'text-red-600' : ''}`}
+            >
+              Users
+            </Link>
+            <Link
+              to="/admin/tutorials"
+              className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
+            >
+              Resources
+            </Link>
+            <Link
+              to="/admin/settings"
+              className={`hover:text-gray-600 ${isActive('/admin/settings') ? 'text-red-600' : ''}`}
+            >
+              Settings
+            </Link>
+          </>
+        );
+      case 'user':
+        return (
+          <>
+            <Link
+              to="/dashboard"
+              className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/tutorials"
+              className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
+            >
+              Resources
+            </Link>
+            {user?.compensation_link ? (
+              <a
+                href={user.compensation_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-600"
+              >
+                My Commissions
+              </a>
+            ) : (
+              <button
+                onClick={() => alert('No compensation link available. Please contact an administrator.')}
+                className="hover:text-gray-600 opacity-50 cursor-not-allowed"
+              >
+                My Commissions
+              </button>
+            )}
+            {user && (
+              <CopyLinkButton link={getReferralLink(user)} />
+            )}
+            <Link
+              target="_blank"
+              to={contactLink}
+              className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
+            >
+              Contact Us
+            </Link>
+          </>
+        );
+      case 'contact':
+        return (
+          <>
+            <Link
+              to="/dashboard"
+              className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/tutorials"
+              className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
+            >
+              Resources
+            </Link>
+            <Link
+              target="_blank"
+              to={contactLink}
+              className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
+            >
+              Contact Us
+            </Link>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm text-gray-800 p-4">
@@ -69,76 +174,7 @@ export default function Layout() {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-6">
-              {user?.role === 'admin' ? (
-                <>
-                  <Link
-                    to="/admin"
-                    className={`hover:text-gray-600 ${isActive('/admin') ? 'text-red-600' : ''}`}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    to="/admin/users"
-                    className={`hover:text-gray-600 ${isActive('/admin/users') ? 'text-red-600' : ''}`}
-                  >
-                    Users
-                  </Link>
-                  <Link
-                    to="/admin/tutorials"
-                    className={`hover:text-gray-600 ${isActive('/admin/tutorials') ? 'text-red-600' : ''}`}
-                  >
-                    Resources
-                  </Link>
-                  <Link
-                    to="/admin/settings"
-                    className={`hover:text-gray-600 ${isActive('/admin/settings') ? 'text-red-600' : ''}`}
-                  >
-                    Settings
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/dashboard"
-                    className={`hover:text-gray-600 ${isActive('/dashboard') ? 'text-red-600' : ''}`}
-                  >
-                    Dashboard
-                  </Link> 
-                  <Link
-                    to="/tutorials"
-                    className={`hover:text-gray-600 ${isActive('/tutorials') ? 'text-red-600' : ''}`}
-                  >
-                    Resources
-                  </Link>
-                  {user?.compensation_link ? (
-                    <a
-                      href={user.compensation_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-gray-600"
-                    >
-                      My Commissions
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => alert('No compensation link available. Please contact an administrator.')}
-                      className="hover:text-gray-600 opacity-50 cursor-not-allowed"
-                    >
-                      My Commissions
-                    </button>
-                  )}
-                  {user && (
-                    <CopyLinkButton link={getReferralLink(user)} />
-                  )}
-                  <Link
-                    target="_blank"
-                    to={contactLink}
-                    className={`hover:text-gray-600 ${isActive('/contact-us') ? 'text-red-600' : ''}`}
-                  >
-                    Contact Us
-                  </Link>
-                </>
-              )}
+            {renderNavLinks()}
               <div className="flex items-center space-x-4 ml-4 pl-4 border-l border-gray-200">
                 {user?.role === 'user' && (
                   <div className="relative">
