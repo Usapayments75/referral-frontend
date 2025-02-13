@@ -30,51 +30,59 @@ api.interceptors.request.use(
 // Response interceptor
 api.interceptors.response.use(
     (response) => response,
-    (error: AxiosError) => {
+    async (error: AxiosError) => {
+        const originalRequest = error.config;
+        
         if (error.response) {
             const { status } = error.response;
 
-            switch (status) {
-                case 401: {
-                    // Unauthorized - clear auth state and redirect to login
+            // Handle token expiration
+            if (status === 401 && originalRequest && !originalRequest.headers['X-Retry']) {
+                // Try to refresh the token or redirect to login
+                try {
+                    // Clear auth state
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
 
                     // Only redirect if we're not already on the login or register page
                     const currentPath = window.location.pathname;
-                    if (!['/login'].includes(currentPath)) {
+                    if (!['/login', '/register', '/forgot-password', '/reset-password'].includes(currentPath)) {
                         window.location.href = '/login';
                     }
-                    break;
+                } catch (refreshError) {
+                    console.error('Token refresh failed:', refreshError);
                 }
-                case 403: {
-                    // Forbidden - user doesn't have necessary permissions
-                    console.error('Access forbidden:', error.response.data);
-                    break;
-                }
-                case 404: {
-                    // Not Found
-                    console.error('Resource not found:', error.response.data);
-                    break;
-                }
-                case 422: {
-                    // Validation error
-                    console.error('Validation error:', error.response.data);
-                    break;
-                }
-                case 429: {
-                    // Too Many Requests
-                    console.error('Rate limit exceeded:', error.response.data);
-                    break;
-                }
-                case 500: {
-                    // Server error
-                    console.error('Server error:', error.response.data);
-                    break;
-                }
-                default: {
-                    console.error('API error:', error.response.data);
-                    break;
+            } else {
+                switch (status) {
+                    case 403: {
+                        // Forbidden - user doesn't have necessary permissions
+                        console.error('Access forbidden:', error.response.data);
+                        break;
+                    }
+                    case 404: {
+                        // Not Found
+                        console.error('Resource not found:', error.response.data);
+                        break;
+                    }
+                    case 422: {
+                        // Validation error
+                        console.error('Validation error:', error.response.data);
+                        break;
+                    }
+                    case 429: {
+                        // Too Many Requests
+                        console.error('Rate limit exceeded:', error.response.data);
+                        break;
+                    }
+                    case 500: {
+                        // Server error
+                        console.error('Server error:', error.response.data);
+                        break;
+                    }
+                    default: {
+                        console.error('API error:', error.response.data);
+                        break;
+                    }
                 }
             }
         } else if (error.request) {
@@ -85,7 +93,6 @@ api.interceptors.response.use(
             console.error('Request configuration error:', error.message);
         }
 
-        // Propagate the error for the calling code to handle
         return Promise.reject(error);
     }
 );
