@@ -4,7 +4,7 @@ import StatsCard from '../../components/StatsCard';
 import { useAdminStats } from '../../hooks/useAdminStats';
 import { formatDateTime } from '../../utils/dateUtils';
 
-export default function AdminDashboard() {
+const AdminDashboard: React.FC = () => {
   const { stats, loading, error } = useAdminStats();
 
   if (loading) {
@@ -86,7 +86,9 @@ export default function AdminDashboard() {
             )}
           </div>
         </div> 
-        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default AdminDashboard;

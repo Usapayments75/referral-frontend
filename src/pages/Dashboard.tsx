@@ -1,3 +1,5 @@
+"use strict";
+
 import React, { useEffect, useState } from 'react';
 import { Users, TrendingUp, Target } from 'lucide-react';
 import StatsCard from '../components/StatsCard';
@@ -22,6 +24,11 @@ export default function Dashboard() {
   } = useDashboardData();
   
   const { user } = useAuthStore();
+
+  useEffect(() => {
+	console.log("🚀 ~ Dashboard ~ user:", user);
+  }, [user]);
+  
   const [contactLeads, setContactLeads] = useState<ContactLead[]>([]);
   const [contactLeadsLoading, setContactLeadsLoading] = useState(false);
   const [contactLeadsError, setContactLeadsError] = useState<string | null>(null);
@@ -36,6 +43,7 @@ export default function Dashboard() {
           setContactLeadsError(null);
         } catch (err) {
           setContactLeadsError(err instanceof Error ? err.message : 'Failed to fetch contact leads');
+          setContactLeads([]);
         } finally {
           setContactLeadsLoading(false);
         }
@@ -55,6 +63,14 @@ export default function Dashboard() {
     return (
       <AsyncBoundary loading={contactLeadsLoading} error={contactLeadsError}>
         <div className="space-y-6">
+          <div className="sm:flex sm:items-center">
+            <div className="sm:flex-auto">
+              <h1 className="text-2xl font-semibold text-gray-900">My Deals</h1>
+              <p className="mt-2 text-sm text-gray-700">
+                View and manage your assigned deals
+              </p>
+            </div>
+          </div>
           <ContactDealsTable leads={contactLeads} />
         </div>
       </AsyncBoundary>

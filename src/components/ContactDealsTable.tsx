@@ -8,7 +8,7 @@ interface ContactDealsTableProps {
 }
 
 export default function ContactDealsTable({ leads }: ContactDealsTableProps) {
-  if (leads.length === 0) {
+  if (!leads || leads.length === 0) {
     return (
       <div className="bg-white shadow rounded-lg overflow-hidden mt-6">
         <div className="px-6 py-5 border-b border-gray-200">
@@ -48,18 +48,18 @@ export default function ContactDealsTable({ leads }: ContactDealsTableProps) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {leads.map((lead) => (
-              <tr key={lead.lead_id}>
+              <tr key={`${lead.contact_id}-${lead.lead_id}`}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {lead.lead_name}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {lead.company}
+                  {lead.company || 'N/A'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {lead.contact_details.full_name}
+                  {lead.contact_details?.full_name || 'N/A'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {lead.contact_details.email}
+                  {lead.contact_details?.email || 'N/A'}
                 </td>
               </tr>
             ))}

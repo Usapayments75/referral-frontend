@@ -41,12 +41,27 @@ export async function getLeads(params?: LeadsParams, signal?: AbortSignal): Prom
 
 export async function getContactLeads(contactId: string, signal?: AbortSignal): Promise<ContactLead[]> {
   try {
-    const response = await api.get(`/leads/leads/by-contacts`, {
-      params: { contact_ids: contactId },
+    const response = await api.get('/leads/by-contact', {
+      params: { contact_id: contactId },
       signal,
     });
 
-    return response.data?.leads || [];
+    if (!response.data?.leads) {
+      return [];
+    }
+
+    return response.data.leads.map((lead: any) => ({
+      contact_id: lead.contact_id || '',
+      lead_id: lead.lead_id || '',
+      lead_name: lead.lead_name || 'Unnamed Lead',
+      company: lead.company || '',
+      contact_details: {
+        uuid: lead.contact_details?.uuid || '',
+        full_name: lead.contact_details?.full_name || '',
+        email: lead.contact_details?.email || '',
+        partner_id: lead.contact_details?.partner_id || ''
+      }
+    }));
   } catch (error) {
     if (error.response?.status === 500) {
       return [];
