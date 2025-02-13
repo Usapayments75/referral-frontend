@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Users, TrendingUp, Target } from 'lucide-react';
 import StatsCard from '../components/StatsCard';
 import ReferralTable from '../components/ReferralTable';
 import DealsTable from '../components/DealsTable';
+import ContactDealsTable from '../components/ContactDealsTable';
 import AsyncBoundary from '../components/AsyncBoundary';
 import { useDashboardData } from '../hooks/useDashboardData';
 import { useAuthStore } from '../store/authStore';
-import ReferralLink from '../components/referrals/ReferralLink';
-import { getReferralLink } from '../utils/referral';
+import { getContactLeads } from '../services/api/leads';
+import { ContactLead } from '../types';
 
 export default function Dashboard() {
   const { 
@@ -21,6 +22,28 @@ export default function Dashboard() {
   } = useDashboardData();
   
   const { user } = useAuthStore();
+  const [contactLeads, setContactLeads] = useState<ContactLead[]>([]);
+  const [contactLeadsLoading, setContactLeadsLoading] = useState(false);
+  const [contactLeadsError, setContactLeadsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchContactLeads = async () => {
+      if (user?.role === 'contact' && user.partner_id) {
+        setContactLeadsLoading(true);
+        try {
+          const leads = await getContactLeads(user.partner_id);
+          setContactLeads(leads);
+          setContactLeadsError(null);
+        } catch (err) {
+          setContactLeadsError(err instanceof Error ? err.message : 'Failed to fetch contact leads');
+        } finally {
+          setContactLeadsLoading(false);
+        }
+      }
+    };
+
+    fetchContactLeads();
+  }, [user]);
 
   const formatChange = (value: number, isPercentage: boolean = false) => {
     if (value === 0) return 'No change vs last month';
@@ -28,14 +51,19 @@ export default function Dashboard() {
     return `${prefix}${value}${isPercentage ? '%' : ''} vs last month`;
   };
 
+  if (user?.role === 'contact') {
+    return (
+      <AsyncBoundary loading={contactLeadsLoading} error={contactLeadsError}>
+        <div className="space-y-6">
+          <ContactDealsTable leads={contactLeads} />
+        </div>
+      </AsyncBoundary>
+    );
+  }
+
   return (
     <AsyncBoundary loading={loading} error={error}>
       <div className="space-y-6">
-        {/* {user && (
-          <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <ReferralLink link={getReferralLink(user)} />
-          </div>
-        )} */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <StatsCard
             title="Total Referrals"

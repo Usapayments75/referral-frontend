@@ -105,24 +105,27 @@ export interface Deal {
   Lead_Source: string;
   Created_Time: string;
 }
-
-// export interface AdminStats {
-//   totalUsers: number;
-//   activeUsers: number;
-//   totalTutorials: number;
-//   recentActivity: Array<{
-//     user: string;
-//     action: string;
-//     timeAgo: string;
-//   }>;
-// }
-
+ 
 export interface AuthResponse {
   status: string;
   message: string;
   data: {
     user: User;
     token: string;
+  };
+}
+
+
+export interface ContactLead {
+  contact_id: string;
+  lead_id: string;
+  lead_name: string;
+  company: string;
+  contact_details: {
+    uuid: string;
+    full_name: string;
+    email: string;
+    partner_id: string;
   };
 }
 

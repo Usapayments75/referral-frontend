@@ -1,7 +1,8 @@
 import api from '../axios';
-import { Referral, ReferralStatus } from '../../types';
-import { ZohoLeadResponse, ReferralSubmission, ZohoResponse } from './types';
+import { Referral, ContactLead, ReferralStatus, ReferralSubmission } from '../../types';
 import { handleApiError } from './errorHandler';
+import { formatDateForAPI } from '../../utils/dateUtils';
+import { LeadsParams, ZohoLeadResponse } from './types';
 
 export async function getLeads(params?: LeadsParams, signal?: AbortSignal): Promise<Referral[]> {
   try {
@@ -30,6 +31,22 @@ export async function getLeads(params?: LeadsParams, signal?: AbortSignal): Prom
       Phone: lead.Phone,
       Contact_Number: lead.Contact_Number
     }));
+  } catch (error:any) {
+    if (error.response?.status === 500) {
+      return [];
+    }
+    return handleApiError(error);
+  }
+}
+
+export async function getContactLeads(contactId: string, signal?: AbortSignal): Promise<ContactLead[]> {
+  try {
+    const response = await api.get(`/leads/leads/by-contacts`, {
+      params: { contact_ids: contactId },
+      signal,
+    });
+
+    return response.data?.leads || [];
   } catch (error) {
     if (error.response?.status === 500) {
       return [];
