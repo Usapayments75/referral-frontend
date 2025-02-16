@@ -61,6 +61,7 @@ export async function getContactLeads(contactId: string, signal?: AbortSignal): 
 			lead_id: lead.lead_id || '',
 			lead_name: lead.lead_name || 'Unnamed Lead',
 			company: lead.company || '',
+			email: lead.email || '',
 			contact_details: {
 				uuid: lead.contact_details?.uuid || '',
 				full_name: lead.contact_details?.full_name || '',

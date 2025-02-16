@@ -121,6 +121,8 @@ export interface ContactLead {
   lead_id: string;
   lead_name: string;
   company: string;
+  email:string;
+  phone:string;
   contact_details: {
     uuid: string;
     full_name: string;

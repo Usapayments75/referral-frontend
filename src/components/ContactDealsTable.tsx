@@ -70,10 +70,10 @@ export default function ContactDealsTable({ leads, loading }: ContactDealsTableP
                   {lead.company || 'N/A'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {lead.contact_details?.full_name || 'N/A'}
+                  {lead?.lead_name || 'N/A'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {lead.contact_details?.email || 'N/A'}
+                  {lead?.email || 'N/A'}
                 </td>
               </tr>
             ))}
