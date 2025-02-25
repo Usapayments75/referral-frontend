@@ -19,6 +19,11 @@ interface PasswordForm {
     confirm_password: string;
 }
 
+interface AddUserForm {
+    full_name: string;
+    email: string;
+}
+
 export default function SubAccounts() {
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState(true);
@@ -27,9 +32,12 @@ export default function SubAccounts() {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
     const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [showAddUserModal, setShowAddUserModal] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const { user } = useAuthStore();
 
     const { register, handleSubmit, formState: { errors }, watch, reset } = useForm<PasswordForm>();
+    const { register: registerAddUser, handleSubmit: handleSubmitAddUser, formState: { errors: addUserErrors }, reset: resetAddUser } = useForm<AddUserForm>();
     const newPassword = watch('new_password');
 
     useEffect(() => {
@@ -51,10 +59,42 @@ export default function SubAccounts() {
         fetchContacts();
     }, [user?.uuid]);
 
+    const handleAddUser = async (data: AddUserForm) => {
+        if (!user?.partner_id) {
+            setError('Unable to add user: Missing partner ID');
+            return;
+        }
+
+        setIsSubmitting(true);
+        setError(null);
+        try {
+            const response = await api.post('/users/partner/add-contact', {
+                full_name: data.full_name,
+                email: data.email,
+                partner_id: user.partner_id
+            });
+
+            if (response.data.status === 'success') {
+                setSuccessMessage('User added successfully');
+                // Refresh the contacts list
+                const updatedResponse = await api.get(`/users/user/${user.uuid}/contacts`);
+                if (updatedResponse.data.status === 'success') {
+                    setContacts(updatedResponse.data.data.contacts);
+                }
+                setShowAddUserModal(false);
+                resetAddUser();
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to add user');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     const openPasswordModal = (contact: Contact) => {
         setSelectedContact(contact);
         setShowPasswordModal(true);
-        reset(); // Reset form when opening modal
+        reset();
     };
 
     const closePasswordModal = () => {
@@ -100,12 +140,20 @@ export default function SubAccounts() {
     return (
         <>
             <div className="space-y-6">
-                <div className="sm:flex sm:items-center">
+                <div className="sm:flex sm:items-center sm:justify-between">
                     <div className="sm:flex-auto">
                         <h1 className="text-2xl font-semibold text-gray-900">Users</h1>
                         <p className="mt-2 text-sm text-gray-700">
                             Manage your users and their access
                         </p>
+                    </div>
+                    <div className="mt-4 sm:mt-0">
+                        <button
+                            onClick={() => setShowAddUserModal(true)}
+                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                        >
+                            Add User
+                        </button>
                     </div>
                 </div>
 
@@ -129,7 +177,7 @@ export default function SubAccounts() {
                     <div className="text-center py-12 bg-white rounded-lg shadow">
                         <Users className="mx-auto h-12 w-12 text-gray-400" />
                         <h3 className="mt-2 text-sm font-medium text-gray-900">No Users</h3>
-                        <p className="mt-1 text-sm text-gray-500">You haven't created any users yet.</p>
+                        <p className="mt-1 text-sm text-gray-500">Get started by adding a new user.</p>
                     </div>
                 ) : (
                     <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -187,6 +235,100 @@ export default function SubAccounts() {
                     </div>
                 )}
             </div>
+
+            {/* Add User Modal */}
+            {showAddUserModal && (
+                <div className="fixed inset-0 z-50 overflow-y-auto">
+                    <div className="flex min-h-screen items-center justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowAddUserModal(false)} />
+
+                        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                            <div className="absolute top-0 right-0 pt-4 pr-4">
+                                <button
+                                    onClick={() => setShowAddUserModal(false)}
+                                    className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                >
+                                    <span className="sr-only">Close</span>
+                                    <X className="h-6 w-6" />
+                                </button>
+                            </div>
+
+                            <div className="sm:flex sm:items-start">
+                                <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                                        Add New User
+                                    </h3>
+                                    <div className="mt-4">
+                                        <form onSubmit={handleSubmitAddUser(handleAddUser)} className="space-y-4">
+                                            <div>
+                                                <label htmlFor="full_name" className="block text-sm font-medium text-gray-700">
+                                                    Full Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    id="full_name"
+                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                                                    {...registerAddUser('full_name', {
+                                                        required: 'Full name is required'
+                                                    })}
+                                                />
+                                                {addUserErrors.full_name && (
+                                                    <p className="mt-1 text-sm text-red-600">{addUserErrors.full_name.message}</p>
+                                                )}
+                                            </div>
+
+                                            <div>
+                                                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                                                    Email
+                                                </label>
+                                                <input
+                                                    type="email"
+                                                    id="email"
+                                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+                                                    {...registerAddUser('email', {
+                                                        required: 'Email is required',
+                                                        pattern: {
+                                                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                                            message: 'Invalid email address'
+                                                        }
+                                                    })}
+                                                />
+                                                {addUserErrors.email && (
+                                                    <p className="mt-1 text-sm text-red-600">{addUserErrors.email.message}</p>
+                                                )}
+                                            </div>
+
+                                            <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                                                <button
+                                                    type="submit"
+                                                    disabled={isSubmitting}
+                                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                                                >
+                                                    {isSubmitting ? (
+                                                        <>
+                                                            <div className="animate-spin -ml-1 mr-2 h-4 w-4 border-t-2 border-b-2 border-white rounded-full"></div>
+                                                            Adding...
+                                                        </>
+                                                    ) : (
+                                                        'Add User'
+                                                    )}
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowAddUserModal(false)}
+                                                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:w-auto sm:text-sm"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Password Reset Modal */}
             {showPasswordModal && (
