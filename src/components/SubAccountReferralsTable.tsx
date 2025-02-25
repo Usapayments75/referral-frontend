@@ -31,7 +31,7 @@ export default function SubAccountReferralsTable({ leads, loading }: SubAccountR
         <EmptyState
           icon={Users}
           title="No sub account referrals"
-          description="Your sub accounts haven't submitted any referrals yet."
+          description="Your Users haven't submitted any referrals yet."
         />
       </div>
     );

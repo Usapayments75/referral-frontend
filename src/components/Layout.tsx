@@ -93,7 +93,7 @@ export default function Layout() {
 							to="/sub-accounts"
 							className={`hover:text-gray-600 ${isActive('/sub-accounts') ? 'text-red-600' : ''}`}
 						>
-							Sub Accounts
+							Users
 						</Link>
 						{user && (
 							<CopyLinkButton link={getReferralLink(user)} />
