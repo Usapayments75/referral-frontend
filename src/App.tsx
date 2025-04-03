@@ -34,7 +34,8 @@ function AppRoutes() {
 
 	const getDefaultRedirect = () => {
 		if (!isAuthenticated) return '/login';
-		return user?.role === 'admin' ? '/admin' : '/dashboard';
+		console.log(user?.role);
+		return user?.role == 'admin' ? '/admin' : '/dashboard';
 	};
 
 	return (
@@ -100,7 +101,7 @@ function AppRoutes() {
 					{/* User Routes */}
 					<Route
 						element={
-							<ProtectedRoute requiredRole={user?.role}>
+							<ProtectedRoute requiredRole={user ? 'user' : 'contact'}>
 								<Outlet />
 							</ProtectedRoute>
 						}

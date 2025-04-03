@@ -10,7 +10,10 @@ export default function PublicRoute({ children }: PublicRouteProps) {
   const { isAuthenticated, user } = useAuthStore();
   
   if (isAuthenticated) {
-    return <Navigate to={user?.role === 'admin' ? '/admin' : '/dashboard'} replace />;
+    if (user?.role === 'admin') {
+      return <Navigate to="/admin" replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <>{children}</>;

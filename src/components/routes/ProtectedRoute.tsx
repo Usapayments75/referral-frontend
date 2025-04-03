@@ -8,7 +8,6 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
-  console.log("🚀 ~ ProtectedRoute ~ requiredRole:", requiredRole)
   const { isAuthenticated, user } = useAuthStore();
   const location = useLocation();
 
@@ -16,8 +15,10 @@ export default function ProtectedRoute({ children, requiredRole }: ProtectedRout
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // If a specific role is required and user doesn't have it, redirect to appropriate dashboard
   if (requiredRole && user?.role !== requiredRole) {
-    return <Navigate to={user?.role === 'admin' ? '/admin' : '/dashboard'} replace />;
+    const redirectPath = user?.role === 'admin' ? '/admin' : '/dashboard';
+    return <Navigate to={redirectPath} replace />;
   }
 
   return <>{children}</>;
