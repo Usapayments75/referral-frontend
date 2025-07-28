@@ -7,6 +7,8 @@ import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
 import Logo from './Logo';
 import { useContactLink } from '../hooks/useContactLink';
+import { useSessionTimeout } from '../hooks/useSessionTimeout';
+import SessionTimeoutModal from './SessionTimeoutModal';
 
 export default function Layout() {
 	const { user, logout } = useAuthStore();
@@ -17,6 +19,25 @@ export default function Layout() {
 	const contactLink = useContactLink();
 
 	useProfile();
+
+	// Session timeout hook - automatically logout after 5 minutes of inactivity
+	const {
+		showWarning,
+		timeRemaining,
+		handleExtendSession,
+		handleLogoutNow
+	} = useSessionTimeout({
+		timeoutMinutes: 5,
+		warningMinutes: 1,
+		onWarning: () => {
+			// Optional: Show a warning notification
+			console.log('Session will expire in 1 minute');
+		},
+		onTimeout: () => {
+			// Optional: Show a message that user was logged out due to inactivity
+			console.log('Session expired due to inactivity');
+		}
+	});
 
 	const isActive = (path: string) => location.pathname === path;
 
@@ -338,6 +359,14 @@ export default function Layout() {
 			<main className="container mx-auto py-8 px-4">
 				<Outlet />
 			</main>
+
+			{/* Session Timeout Modal */}
+			<SessionTimeoutModal
+				isOpen={showWarning}
+				onExtend={handleExtendSession}
+				onLogout={handleLogoutNow}
+				timeRemaining={timeRemaining}
+			/>
 		</div>
 	);
 }

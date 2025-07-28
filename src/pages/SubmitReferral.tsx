@@ -173,15 +173,18 @@ export default function SubmitReferral() {
 
 							<div>
 								<label htmlFor="description" className="block text-sm font-medium text-gray-700">
-									Additional Notes
+									Additional Notes<span className="text-red-500">*</span>
 								</label>
 								<textarea
 									id="description"
 									rows={4}
 									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
-									{...register('description')}
+									{...register('description', { required: 'Additional notes are required' })}
 									disabled={submitting}
 								/>
+								{errors.description && (
+									<p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+								)}
 							</div>
 
 							<div className="flex justify-end">

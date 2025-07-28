@@ -9,7 +9,7 @@ export default function SuccessMessage() {
           <div className="text-center">
             <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Thank You!
+              Thank you for the Referral!
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Your referral has been submitted successfully. We'll review it and get in touch soon.
