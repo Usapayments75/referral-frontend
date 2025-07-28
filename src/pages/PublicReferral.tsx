@@ -164,7 +164,7 @@ ${data.description || 'None provided'}
 									<input
 										type="text"
 										id="businessName"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 										{...register('businessName', { required: 'Business name is required' })}
 										disabled={submitting}
 									/>
@@ -180,7 +180,7 @@ ${data.description || 'None provided'}
 									<input
 										type="text"
 										id="fullName"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 										{...register('fullName', { required: 'Full name is required' })}
 										disabled={submitting}
 									/>
@@ -196,7 +196,7 @@ ${data.description || 'None provided'}
 									<input
 										type="email"
 										id="email"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 										{...register('email', {
 											required: 'Email is required',
 											pattern: {
@@ -231,7 +231,7 @@ ${data.description || 'None provided'}
 								<textarea
 									id="description"
 									rows={4}
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 									{...register('description', { required: 'Additional notes are required' })}
 									disabled={submitting}
 								/>

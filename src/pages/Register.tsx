@@ -16,7 +16,7 @@ export default function Register() {
 	const register = useAuthStore((state) => state.register);
 	const [error, setError] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const { register: registerField, handleSubmit, watch, formState: { errors } } = useForm<RegisterForm>();
+	const { register: registerField, handleSubmit, watch, formState: { errors, getValues } } = useForm<RegisterForm>();
 	const password = watch('password');
 
 	const onSubmit = async (data: RegisterForm) => {
@@ -78,7 +78,7 @@ export default function Register() {
 									id="fullName"
 									type="text"
 									autoComplete="name"
-									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
+									className="appearance-none block w-full px-3 py-3 border border-black border-opacity-20 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-base"
 									{...registerField('fullName', { required: 'Full name is required' })}
 									disabled={isSubmitting}
 								/>
@@ -97,7 +97,7 @@ export default function Register() {
 									id="emailAddress"
 									type="email"
 									autoComplete="email"
-									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
+									className="appearance-none block w-full px-3 py-3 border border-black border-opacity-20 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-base"
 									{...registerField('emailAddress', {
 										required: 'Email is required',
 										pattern: {
@@ -122,7 +122,7 @@ export default function Register() {
 									id="password"
 									type="password"
 									autoComplete="new-password"
-									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
+									className="appearance-none block w-full px-3 py-3 border border-black border-opacity-20 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-base"
 									{...registerField('password', {
 										required: 'Password is required',
 										minLength: {
@@ -147,10 +147,13 @@ export default function Register() {
 									id="confirmPassword"
 									type="password"
 									autoComplete="new-password"
-									className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
+									className="appearance-none block w-full px-3 py-3 border border-black border-opacity-20 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-base"
 									{...registerField('confirmPassword', {
 										required: 'Please confirm your password',
-										validate: value => value === password || 'Passwords do not match',
+										validate: (value) => {
+											const password = getValues('password');
+											return value === password || 'Passwords do not match';
+										},
 									})}
 									disabled={isSubmitting}
 								/>

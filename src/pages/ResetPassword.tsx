@@ -16,8 +16,8 @@ export default function ResetPassword() {
   const token = searchParams.get('token');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<ResetPasswordForm>();
-  const password = watch('new_password');
+  const { register, handleSubmit, watch, formState: { errors, getValues } } = useForm<ResetPasswordForm>();
+  const password = watch('password');
 
   const onSubmit = async (data: ResetPasswordForm) => {
     if (!token) {
@@ -91,16 +91,16 @@ export default function ResetPassword() {
             )}
 
             <div>
-              <label htmlFor="new_password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 New Password
               </label>
               <div className="mt-1">
                 <input
-                  id="new_password"
+                  id="password"
                   type="password"
                   autoComplete="new-password"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
-                  {...register('new_password', {
+                  className="appearance-none block w-full px-3 py-3 border border-black border-opacity-20 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-base"
+                  {...register('password', {
                     required: 'Password is required',
                     minLength: {
                       value: 8,
@@ -109,30 +109,33 @@ export default function ResetPassword() {
                   })}
                   disabled={isSubmitting}
                 />
-                {errors.new_password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.new_password.message}</p>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <label htmlFor="confirm_new_password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm New Password
               </label>
               <div className="mt-1">
                 <input
-                  id="confirm_new_password"
+                  id="confirmPassword"
                   type="password"
                   autoComplete="new-password"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500"
-                  {...register('confirm_new_password', {
+                  className="appearance-none block w-full px-3 py-3 border border-black border-opacity-20 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-base"
+                  {...register('confirmPassword', {
                     required: 'Please confirm your password',
-                    validate: value => value === password || 'Passwords do not match',
+                    validate: (value) => {
+                      const password = watch('password');
+                      return value === password || 'Passwords do not match';
+                    },
                   })}
                   disabled={isSubmitting}
                 />
-                {errors.confirm_new_password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirm_new_password.message}</p>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
                 )}
               </div>
             </div>

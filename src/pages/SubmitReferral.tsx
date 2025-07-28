@@ -95,7 +95,7 @@ export default function SubmitReferral() {
 									<input
 										type="text"
 										id="firstName"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 										{...register('firstName', { required: 'First name is required' })}
 										disabled={submitting}
 									/>
@@ -111,7 +111,7 @@ export default function SubmitReferral() {
 									<input
 										type="text"
 										id="lastName"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 										{...register('lastName', { required: 'Last name is required' })}
 										disabled={submitting}
 									/>
@@ -128,7 +128,7 @@ export default function SubmitReferral() {
 								<input
 									type="email"
 									id="email"
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 									{...register('email', {
 										required: 'Email is required',
 										pattern: {
@@ -150,7 +150,7 @@ export default function SubmitReferral() {
 								<input
 									type="text"
 									id="company"
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 									{...register('company', { required: 'Company is required' })}
 									disabled={submitting}
 								/>
@@ -178,7 +178,7 @@ export default function SubmitReferral() {
 								<textarea
 									id="description"
 									rows={4}
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
 									{...register('description', { required: 'Additional notes are required' })}
 									disabled={submitting}
 								/>

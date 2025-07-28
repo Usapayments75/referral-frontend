@@ -90,28 +90,14 @@ export default function UserSettings() {
               <label htmlFor="facebook_pixel_id" className="block text-sm font-medium text-gray-700">
                 Facebook Pixel ID
               </label>
-              <div className="mt-1">
-                <input
-                  type="text"
-                  id="facebook_pixel_id"
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
-                  placeholder="Enter your Facebook Pixel ID"
-                  {...register('facebook_pixel_id', {
-                    pattern: {
-                      value: /^\d+$/,
-                      message: 'Please enter a valid Pixel ID (numbers only)'
-                    }
-                  })}
-                  disabled={isSubmitting}
-                />
-                {errors.facebook_pixel_id && (
-                  <p className="mt-1 text-sm text-red-600">{errors.facebook_pixel_id.message}</p>
-                )}
-              </div>
-              <p className="mt-2 text-sm text-gray-500">
-                Your Facebook Pixel ID is used to track conversions from your referral links.
-                You can find your Pixel ID in your Facebook Business Manager account.
-              </p>
+              <input
+                type="text"
+                id="facebook_pixel_id"
+                className="mt-1 block w-full rounded-md border border-black border-opacity-20 shadow-sm focus:border-red-500 focus:ring-red-500 px-3 py-3 text-base"
+                placeholder="Enter your Facebook Pixel ID"
+                {...register('facebook_pixel_id')}
+                disabled={isSubmitting}
+              />
             </div>
 
             <div className="flex justify-end">
