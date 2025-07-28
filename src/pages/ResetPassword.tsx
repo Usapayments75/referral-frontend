@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { KeyRound } from 'lucide-react';
 import api from '../services/axios';
 import Logo from '../components/Logo';
+import toast from 'react-hot-toast';
 
 interface ResetPasswordForm {
   new_password: string;
@@ -22,6 +22,7 @@ export default function ResetPassword() {
   const onSubmit = async (data: ResetPasswordForm) => {
     if (!token) {
       setError('Reset token is missing');
+      toast.error('Reset token is missing');
       return;
     }
 
@@ -36,14 +37,17 @@ export default function ResetPassword() {
       });
 
       if (response.data.status === 'success') {
+        toast.success('Password reset successfully! Please log in with your new password.');
         navigate('/login', { 
           state: { message: 'Password has been reset successfully. Please log in with your new password.' }
         });
       } else {
         setError(response.data.message || 'Failed to reset password');
+        toast.error(response.data.message || 'Failed to reset password');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }

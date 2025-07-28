@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Copy, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 interface CopyLinkButtonProps {
 	link: string;
-	className?: string;
 }
 
-export default function CopyLinkButton({ link, className = '' }: CopyLinkButtonProps) {
+export default function CopyLinkButton({ link }: CopyLinkButtonProps) {
 	const [copied, setCopied] = useState(false);
 
 	const handleCopy = async () => {
 		try {
 			await navigator.clipboard.writeText(link);
 			setCopied(true);
+			toast.success('Referral link copied to clipboard!');
 			setTimeout(() => setCopied(false), 2000);
 		} catch (err) {
 			console.error('Failed to copy:', err);
+			toast.error('Failed to copy link to clipboard');
 		}
 	};
 	const isActive = (path: string) => location.pathname === path;

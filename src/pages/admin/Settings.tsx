@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Settings as SettingsIcon, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, X } from 'lucide-react';
 import { settingsService } from '../../services/settingsService';
 import { Setting } from '../../types';
+import toast from 'react-hot-toast';
 
 interface SettingForm {
     key: string;
@@ -49,8 +50,10 @@ export default function Settings() {
             setShowForm(false);
             setEditingSetting(null);
             reset();
+            toast.success(editingSetting ? 'Setting updated' : 'Setting added');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to save setting');
+            toast.error(editingSetting ? 'Failed to update setting' : 'Failed to add setting');
         } finally {
             setIsSubmitting(false);
         }
@@ -69,8 +72,10 @@ export default function Settings() {
             await settingsService.deleteSetting(key);
             await fetchSettings();
             setError(null);
+            toast.success('Setting deleted');
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Failed to delete setting');
+            toast.error('Failed to delete setting');
         }
     };
 

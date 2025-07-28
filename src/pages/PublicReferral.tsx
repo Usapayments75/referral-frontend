@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BusinessTypeSelect from '../components/form/BusinessTypeSelect';
 import PhoneInput from '../components/PhoneInput';
@@ -8,6 +8,7 @@ import SuccessMessage from '../components/referrals/SuccessMessage';
 import { MessageCircle } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useContactLink } from '../hooks/useContactLink';
+import toast from 'react-hot-toast';
 
 interface ReferralForm {
 	businessName: string;
@@ -23,7 +24,6 @@ interface ReferralForm {
 export default function PublicReferral() {
 	const { uuid } = useParams<{ uuid: string }>();
 	const [submitting, setSubmitting] = useState(false);
-	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 	const contactLink = useContactLink();
@@ -76,9 +76,12 @@ export default function PublicReferral() {
 
 
 	const onSubmit = async (data: ReferralForm) => {
+		if (!uuid) {
+			toast.error('Invalid referral link');
+			return;
+		}
+
 		setSubmitting(true);
-		setSubmitError(null);
-		setSubmitSuccess(false);
 
 		try {
 			const formattedPhone = formatPhoneNumber(data.countryCode, data.phoneNumber);
@@ -98,8 +101,9 @@ ${data.description || 'None provided'}
         `.trim()
 			});
 			setSubmitSuccess(true);
+			toast.success('Referral submitted successfully!');
 		} catch (err) {
-			setSubmitError(err instanceof Error ? err.message : 'Failed to submit referral');
+			toast.error('Failed to submit referral. Please try again.');
 		} finally {
 			setSubmitting(false);
 		}
@@ -226,15 +230,18 @@ ${data.description || 'None provided'}
 
 							<div>
 								<label htmlFor="description" className="block text-sm font-medium text-gray-700">
-									Additional Notes
+									Additional Notes<span className="text-red-500">*</span>
 								</label>
 								<textarea
 									id="description"
 									rows={4}
 									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
-									{...register('description')}
+									{...register('description', { required: 'Additional notes are required' })}
 									disabled={submitting}
 								/>
+								{errors.description && (
+									<p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+								)}
 							</div>
 
 							<div className="flex items-start space-x-3">

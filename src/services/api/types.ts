@@ -30,6 +30,7 @@ export interface ReferralSubmission {
   lastName: string;
   email: string;
   company: string; 
+  businessType: string;
   phoneNumber: string;
   title: string;
   description: string;

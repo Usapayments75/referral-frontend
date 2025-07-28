@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AlertCircle, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { User, PaginationMetadata } from '../../types';
 import { userService } from '../../services/userService';
@@ -6,6 +6,7 @@ import CompensationLinkModal from './CompensationLinkModal';
 import UpdatePasswordModal from './UpdatePasswordModal';
 import UpdatePixelIdModal from './UpdatePixelIdModal';
 import { useDebounce } from '../../hooks/useDebounce';
+import toast from 'react-hot-toast';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -55,8 +56,10 @@ export default function UserManagement() {
 			setIsPixelIdModalOpen(false);
 			setSelectedUser(null);
 			setError(null);
+			toast.success('Facebook Pixel ID updated successfully!');
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to update Facebook Pixel ID');
+			toast.error('Failed to update Facebook Pixel ID');
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -91,8 +94,10 @@ export default function UserManagement() {
 			await userService.triggerPasswordReset(user.email);
 			setSuccessMessage('Password reset email sent successfully');
 			setTimeout(() => setSuccessMessage(null), 5000);
+			toast.success('Password reset email sent successfully!');
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to send password reset email');
+			toast.error('Failed to send password reset email');
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -109,9 +114,11 @@ export default function UserManagement() {
 				setIsCompensationModalOpen(false);
 				setSelectedUser(null);
 				setError(null);
+				toast.success('Compensation link updated successfully!');
 			}
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to update compensation link');
+			toast.error('Failed to update compensation link');
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -130,8 +137,10 @@ export default function UserManagement() {
 			setIsPasswordModalOpen(false);
 			setSelectedUser(null);
 			setError(null);
+			toast.success('Password updated successfully!');
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to update password');
+			toast.error('Failed to update password');
 		} finally {
 			setIsSubmitting(false);
 		}

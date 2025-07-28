@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Video, Plus, Pencil, Trash2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Tutorial } from '../../types';
 import { tutorialService } from '../../services/tutorialService';
 import TutorialForm from './TutorialForm';
+import toast from 'react-hot-toast';
 
 export default function TutorialManagement() {
   const navigate = useNavigate();
@@ -38,8 +39,10 @@ export default function TutorialManagement() {
       setShowForm(false);
       setError(null);
       navigate('/admin/tutorials');
+      toast.success('Tutorial created successfully!');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create tutorial');
+      toast.error('Failed to create tutorial.');
     } finally {
       setIsSubmitting(false);
     }
@@ -49,27 +52,31 @@ export default function TutorialManagement() {
     if (!editingTutorial) return;
     setIsSubmitting(true);
     try {
-      await tutorialService.updateTutorial(editingTutorial.id, data);
+      await tutorialService.updateTutorial(parseInt(editingTutorial.id), data);
       await fetchTutorials();
       setEditingTutorial(null);
       setError(null);
       navigate('/admin/tutorials');
+      toast.success('Tutorial updated successfully!');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update tutorial');
+      toast.error('Failed to update tutorial.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!window.confirm('Are you sure you want to delete this tutorial?')) return;
     
     try {
-      await tutorialService.deleteTutorial(id);
+      await tutorialService.deleteTutorial(parseInt(id));
       await fetchTutorials();
       setError(null);
+      toast.success('Tutorial deleted successfully!');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to delete tutorial');
+      toast.error('Failed to delete tutorial.');
     }
   };
 

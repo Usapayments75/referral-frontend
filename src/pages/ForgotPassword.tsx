@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import api from '../services/axios';
 import Logo from '../components/Logo';
+import toast from 'react-hot-toast';
 
 interface ForgotPasswordForm {
   email: string;
@@ -25,11 +26,14 @@ export default function ForgotPassword() {
 
       if (response.data.status === 'success') {
         setSuccess(true);
+        toast.success('Password reset email sent successfully!');
       } else {
         setError(response.data.message || 'Failed to process request');
+        toast.error(response.data.message || 'Failed to process request');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }

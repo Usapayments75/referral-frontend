@@ -7,6 +7,7 @@ import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
 import Logo from './Logo';
 import { useContactLink } from '../hooks/useContactLink';
+import toast from 'react-hot-toast';
 
 export default function Layout() {
   const { user, logout } = useAuthStore();
@@ -23,6 +24,7 @@ export default function Layout() {
   const handleLogout = () => {
     logout();
     navigate('/login');
+    toast.success('Logged out successfully!');
   };
 
   return (

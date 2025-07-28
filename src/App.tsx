@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import PublicRoute from './components/routes/PublicRoute';
 import LoadingSpinner from './components/LoadingSpinner';
 import { useAuthStore } from './store/authStore';
+import { useInactivityTimer } from './hooks/useInactivityTimer';
 import {
   Login,
-  Register,
   Dashboard,
   AdminDashboard,
   UserManagement,
@@ -25,6 +26,9 @@ import UserSettings from './pages/UserSettings';
 
 function AppRoutes() {
   const { initialize, isAuthenticated, user } = useAuthStore();
+  
+  // Initialize inactivity timer
+  useInactivityTimer();
 
   useEffect(() => {
     initialize();
@@ -125,6 +129,7 @@ function AppRoutes() {
         />
       </Routes>
       <FloatingContactButton />
+      <Toaster />
     </>
   );
 }

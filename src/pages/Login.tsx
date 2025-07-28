@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuthStore } from '../store/authStore';
 import Logo from '../components/Logo';
+import toast from 'react-hot-toast';
 
 interface LoginForm {
   email: string;
@@ -24,12 +25,15 @@ export default function Login() {
     try {
       const result = await login(data.email, data.password);
       if (result.success) {
+        toast.success('Login successful!');
         navigate('/dashboard');
       } else {
         setError(result.message);
+        toast.error(result.message);
       }
     } catch (err) {
       setError('An unexpected error occurred');
+      toast.error('An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
     }
