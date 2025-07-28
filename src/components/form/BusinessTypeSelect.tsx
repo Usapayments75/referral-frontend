@@ -16,7 +16,7 @@ export default function BusinessTypeSelect({ register, disabled, error }: Busine
       <input
         type="text"
         id="businessType"
-        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 ${
+        className={`mt-1 block w-full rounded-md border-black shadow-sm focus:border-red-500 focus:ring-red-500 py-3 px-3 ${
           error ? 'border-red-300' : ''
         }`}
         placeholder="Enter your industry"

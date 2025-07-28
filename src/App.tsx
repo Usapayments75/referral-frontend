@@ -136,7 +136,7 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_relativeSplatPath: true }}>
       <React.Suspense fallback={<LoadingSpinner />}>
         <AppRoutes />
       </React.Suspense>

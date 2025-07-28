@@ -93,12 +93,12 @@ export default function SubmitReferral() {
 							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 								<div>
 									<label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-										First Name
+										First Name<span className="text-red-500">*</span>
 									</label>
 									<input
 										type="text"
 										id="firstName"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border-black shadow-sm focus:border-red-500 focus:ring-red-500 py-3 px-3"
 										{...register('firstName', { required: 'First name is required' })}
 										disabled={submitting}
 									/>
@@ -109,12 +109,12 @@ export default function SubmitReferral() {
 
 								<div>
 									<label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-										Last Name
+										Last Name<span className="text-red-500">*</span>
 									</label>
 									<input
 										type="text"
 										id="lastName"
-										className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+										className="mt-1 block w-full rounded-md border-black shadow-sm focus:border-red-500 focus:ring-red-500 py-3 px-3"
 										{...register('lastName', { required: 'Last name is required' })}
 										disabled={submitting}
 									/>
@@ -126,12 +126,12 @@ export default function SubmitReferral() {
 
 							<div>
 								<label htmlFor="email" className="block text-sm font-medium text-gray-700">
-									Email Address
+									Email Address<span className="text-red-500">*</span>
 								</label>
 								<input
 									type="email"
 									id="email"
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border-black shadow-sm focus:border-red-500 focus:ring-red-500 py-3 px-3"
 									{...register('email', {
 										required: 'Email is required',
 										pattern: {
@@ -148,12 +148,12 @@ export default function SubmitReferral() {
 
 							<div>
 								<label htmlFor="company" className="block text-sm font-medium text-gray-700">
-									Company
+									Company<span className="text-red-500">*</span>
 								</label>
 								<input
 									type="text"
 									id="company"
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border-black shadow-sm focus:border-red-500 focus:ring-red-500 py-3 px-3"
 									{...register('company', { required: 'Company is required' })}
 									disabled={submitting}
 								/>
@@ -181,7 +181,7 @@ export default function SubmitReferral() {
 								<textarea
 									id="description"
 									rows={4}
-									className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"
+									className="mt-1 block w-full rounded-md border-black shadow-sm focus:border-red-500 focus:ring-red-500 py-3 px-3"
 									{...register('description', { required: 'Additional notes are required' })}
 									disabled={submitting}
 								/>
@@ -190,7 +190,7 @@ export default function SubmitReferral() {
 								)}
 							</div>
 
-							<div className="flex justify-end">
+							<div className="flex justify-center">
 								<button
 									type="submit"
 									disabled={submitting}

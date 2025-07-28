@@ -52,8 +52,16 @@ api.interceptors.response.use(
                     break;
                 }
                 case 404: {
-                    // Not Found
-                    console.error('Resource not found:', error.response.data);
+                    // Not Found - but check if it's an expected "no data" response
+                    const message = (error.response.data as any)?.message;
+                    const isExpectedNoData = message && (
+                        message.includes('No deals found') || 
+                        message.includes('You didn\'t refer any lead')
+                    );
+                    
+                    if (!isExpectedNoData) {
+                        console.error('Resource not found:', error.response.data);
+                    }
                     break;
                 }
                 case 422: {
