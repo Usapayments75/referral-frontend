@@ -19,6 +19,7 @@ interface ReferralForm {
 	businessType: string;
 	description: string;
 	smsConsent: boolean;
+	marketingConsent: boolean;
 }
 
 export default function PublicReferral() {
@@ -32,7 +33,8 @@ export default function PublicReferral() {
 	const { register, handleSubmit, formState: { errors } } = useForm<ReferralForm>({
 		defaultValues: {
 			countryCode: '+1',
-			smsConsent: false
+			smsConsent: false,
+			marketingConsent: false
 		}
 	});
 
@@ -95,6 +97,7 @@ export default function PublicReferral() {
 				phoneNumber: formattedPhone,
 				description: `
 SMS Consent: ${data.smsConsent ? 'Yes' : 'No'}
+Marketing Consent: ${data.marketingConsent ? 'Yes' : 'No'}
 
 Additional Notes:
 ${data.description || 'None provided'}
@@ -256,15 +259,35 @@ ${data.description || 'None provided'}
 								</div>
 								<div className="flex-1">
 									<label htmlFor="smsConsent" className="text-sm text-gray-700">
-										SMS Updates<span className="text-red-500">*</span>
+										I Consent to Receive SMS Notifications, Alerts from USA PAYMENTS<span className="text-red-500">*</span>
 									</label>
 									<p className="mt-1 text-sm text-gray-500">
-										I agree to receive SMS messages about my application status and important updates.
+										Message frequency varies. Message & data rates may apply. Text HELP to (877) 267-1555 for assistance. You can reply STOP to unsubscribe at any time.
 									</p>
 								</div>
 							</div>
 							{errors.smsConsent && (
 								<p className="mt-1 text-sm text-red-600">{errors.smsConsent.message}</p>
+							)}
+
+							<div className="flex items-start space-x-3">
+								<div className="flex items-center h-5">
+									<input
+										id="marketingConsent"
+										type="checkbox"
+										className="h-4 w-4 text-red-600 focus:ring-red-500 border-black rounded"
+										{...register('marketingConsent', { required: 'Marketing consent is required' })}
+										disabled={submitting}
+									/>
+								</div>
+								<div className="flex-1">
+									<label htmlFor="marketingConsent" className="text-sm text-gray-700">
+										By checking this box I agree to receive occasional marketing messages from USA PAYMENTS<span className="text-red-500">*</span>
+									</label>
+								</div>
+							</div>
+							{errors.marketingConsent && (
+								<p className="mt-1 text-sm text-red-600">{errors.marketingConsent.message}</p>
 							)}
 
 							<div className="flex items-center justify-center pt-6">

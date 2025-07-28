@@ -70,13 +70,6 @@ export default function SubmitReferral() {
 		<div className="min-h-screen flex flex-col bg-gray-50">
 			<div className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
 				<div className="max-w-2xl mx-auto">
-					<div className="text-center mb-14">
-						<img
-							src="https://usapayments.com/wp-content/uploads/2023/03/28facc_76a02a73c8fc4d41b0a72805a254af78_mv2_d_2500_1500_s_2-1.png"
-							alt="USA Payments"
-							className="h-24 mx-auto"
-						/>
-					</div>
 					<div className="bg-white shadow rounded-lg p-8">
 						<div className="flex items-center space-x-3 mb-6">
 							<Send className="h-6 w-6 text-red-600" />
