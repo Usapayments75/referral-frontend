@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { Copy, Menu, X, LogOut, Settings as SettingsIcon } from 'lucide-react';
+import { Menu, X, LogOut, Settings as SettingsIcon } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';

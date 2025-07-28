@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Settings as SettingsIcon } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
@@ -9,7 +9,7 @@ interface SettingsForm {
 }
 
 export default function UserSettings() {
-  const { user, token } = useAuthStore();
+  const { token } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
