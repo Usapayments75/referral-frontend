@@ -5,7 +5,10 @@ import { userService } from '../../services/userService';
 import CompensationLinkModal from './CompensationLinkModal';
 import UpdatePasswordModal from './UpdatePasswordModal';
 import UpdatePixelIdModal from './UpdatePixelIdModal';
+import ImpersonateButton from './ImpersonateButton';
+import ImpersonationModal from './ImpersonationModal';
 import { useDebounce } from '../../hooks/useDebounce';
+import { useAuthStore } from '../../store/authStore';
 import toast from 'react-hot-toast';
 
 const ITEMS_PER_PAGE = 10;
@@ -24,10 +27,12 @@ export default function UserManagement() {
 	const [isCompensationModalOpen, setIsCompensationModalOpen] = useState(false);
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 	const [isPixelIdModalOpen, setIsPixelIdModalOpen] = useState(false);
+	const [isImpersonationModalOpen, setIsImpersonationModalOpen] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 	const [searchEmail, setSearchEmail] = useState('');
 	const debouncedSearchEmail = useDebounce(searchEmail, 500);
+	const { startImpersonation, isImpersonating } = useAuthStore();
 
 	useEffect(() => {
 		fetchUsers(pagination.currentPage, debouncedSearchEmail);
@@ -68,6 +73,40 @@ export default function UserManagement() {
 	const handleEditPixelId = (user: User) => {
 		setSelectedUser(user);
 		setIsPixelIdModalOpen(true);
+	};
+
+	const handleImpersonateUser = (user: User) => {
+		setSelectedUser(user);
+		setIsImpersonationModalOpen(true);
+	};
+
+	const handleConfirmImpersonation = async () => {
+		if (!selectedUser) return;
+
+		setIsSubmitting(true);
+		try {
+			const result = await startImpersonation(selectedUser.uuid);
+			if (result.success) {
+				setIsImpersonationModalOpen(false);
+				setSelectedUser(null);
+				toast.success(result.message);
+				// The auth store will handle the redirect
+			} else {
+				toast.error(result.message);
+			}
+		} catch (error) {
+			console.error('Impersonation error:', error);
+			toast.error('Failed to start impersonation');
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	const handleImpersonateButtonClick = async (userUuid: string) => {
+		const user = users.find(u => u.uuid === userUuid);
+		if (user) {
+			handleImpersonateUser(user);
+		}
 	};
 
 	const handlePageChange = (page: number) => {
@@ -338,31 +377,36 @@ export default function UserManagement() {
 									)}
 								</td>
 								<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-									<div className="flex space-x-4">
+									<div className="flex flex-wrap gap-2">
 										{user.role === 'user' && (
 											<>
+												<ImpersonateButton
+													user={user}
+													onImpersonate={handleImpersonateButtonClick}
+													disabled={isSubmitting || isImpersonating}
+												/>
 												<button
 													onClick={() => handleEditLink(user)}
-													className="text-blue-600 hover:text-blue-900"
+													className="text-blue-600 hover:text-blue-900 font-medium"
 												>
 													Edit Link
 												</button>
 												<button
 													onClick={() => handleEditPassword(user)}
-													className="text-red-600 hover:text-red-900"
+													className="text-red-600 hover:text-red-900 font-medium"
 												>
 													Update Password
 												</button>
 												<button
 													onClick={() => handleSendPasswordReset(user)}
-													className="text-orange-600 hover:text-orange-900"
+													className="text-orange-600 hover:text-orange-900 font-medium"
 													disabled={isSubmitting}
 												>
 													Send Reset Link
 												</button>
 												<button
 													onClick={() => handleEditPixelId(user)}
-													className="text-green-600 hover:text-green-900"
+													className="text-green-600 hover:text-green-900 font-medium"
 												>
 													Update Pixel ID
 												</button>
@@ -426,6 +470,17 @@ export default function UserManagement() {
 				}}
 				onSubmit={handleUpdatePixelId}
 				userEmail={selectedUser?.email || ''}
+				isSubmitting={isSubmitting}
+			/>
+
+			<ImpersonationModal
+				isOpen={isImpersonationModalOpen}
+				onClose={() => {
+					setIsImpersonationModalOpen(false);
+					setSelectedUser(null);
+				}}
+				onConfirm={handleConfirmImpersonation}
+				targetUser={selectedUser}
 				isSubmitting={isSubmitting}
 			/>
 		</div>

@@ -7,6 +7,7 @@ import CopyLinkButton from './ui/CopyLinkButton';
 import { getReferralLink } from '../utils/referral';
 import Logo from './Logo';
 import { useContactLink } from '../hooks/useContactLink';
+import ImpersonationBanner from './impersonation/ImpersonationBanner';
 import toast from 'react-hot-toast';
 
 export default function Layout() {
@@ -294,6 +295,8 @@ export default function Layout() {
           </div>
         </div>
       </nav>
+
+      <ImpersonationBanner />
 
       <main className="container mx-auto py-8 px-4">
         <Outlet />
